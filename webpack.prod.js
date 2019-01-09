@@ -33,12 +33,12 @@ const defaultConfig = common.map(config => {
 module.exports = defaultConfig.concat([
   merge(defaultConfig[0], {
     entry: './src/index.tsx',
-    externals: getExternal(false, ['styled-components']),
+    externals: getExternal(false, [EXTERNALS]),
     output: {
       filename: 'index.umd.js',
       path: path.resolve(__dirname, 'dist'),
       libraryTarget: 'umd',
-      library: 'ideContextMenu',
+      library: '[LIBNAME]',
       umdNamedDefine: true
     }
   })

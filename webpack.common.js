@@ -1,5 +1,5 @@
 const path = require('path');
-const {getExternal} = require('./webpack-helper')
+const { getExternal } = require('./webpack-helper');
 
 const commontConfig = {
   entry: {
@@ -9,7 +9,7 @@ const commontConfig = {
   node: {
     fs: 'empty'
   },
-  externals: getExternal(true, ['styled-components']),
+  externals: getExternal(true, [EXTERNALS]),
   module: {
     rules: [
       {

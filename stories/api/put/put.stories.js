@@ -4,10 +4,10 @@ import { Row, Col, Input, Button, Select } from 'antd';
 import { wInfo } from '../../../.storybook/utils';
 import mdPut from './put.md';
 
-// import { ComponentTreeFactory } from '../../../src';
-// import { treegen } from '../../helper';
+import { [CLASSNAME]Factory } from '../../../src';
+import { modelPropsGen } from '../../helper';
 
-// const {ComponentTreeWithStore, client} = ComponentTreeFactory();
+const { [CLASSNAME]WithStore, client } = [CLASSNAME]Factory();
 
 const { Option } = Select;
 const styles = {
@@ -19,13 +19,13 @@ const styles = {
 
 let selectedAttrName = '';
 
-function createNew() {
-  const schema = treegen({});
-  client.post('/nodes', { schema: schema });
-}
+const createNew = client => () => {
+  const model = modelPropsGen();
+  client.post('/model', { model: model });
+};
 
-function updateRootName() {
-  client.put('/nodes/root', { name: 'name', value: 'ggggod' });
+function onClick(value) {
+  console.log('当前点击值：', value);
 }
 
 function handleChange(value) {
@@ -33,12 +33,8 @@ function handleChange(value) {
   selectedAttrName = value;
 }
 
-function updateById() {
-  const id = document.getElementById('nodeId').value;
-  if (!id) {
-    document.getElementById('info').innerText = '请输入节点 id';
-    return;
-  }
+
+function updateAttr() {
   if (!selectedAttrName) {
     document.getElementById('info').innerText = '请选择要更改的属性';
     return;
@@ -48,23 +44,18 @@ function updateById() {
 
   // 更新节点属性，返回更新后的数值
   client
-    .put(`/nodes/${id}`, { name: selectedAttrName, value: value })
+    .put(`/model`, { name: selectedAttrName, value: value })
     .then(res => {
       const { status, body } = res;
       if (status === 200) {
-        const isSuccess = body.success;
-        client.get(`/nodes/${id}`).then(res => {
+        client.get(`/model`).then(res => {
           const { status, body } = res;
           if (status === 200) {
-            const node = body.node || {};
+            const config = body.config || {};
             document.getElementById('info').innerText =
-              `更新操作：${isSuccess}; \n` +
-              JSON.stringify(node.toJSON ? node.toJSON() : node, null, 4);
+              `更新操作：; \n` + JSON.stringify(config, null, 4);
           }
         });
-
-        // 同时选中那个节点
-        client.put(`/selection/${id}`);
       }
     })
     .catch(err => {
@@ -74,36 +65,31 @@ function updateById() {
 }
 storiesOf('API - put', module)
   .addParameters(wInfo(mdPut))
-  .addWithJSX('/nodes/:id 更改节点信息', () => {
+  .addWithJSX('/model 更改属性', () => {
     return (
       <Row style={styles.demoWrap}>
         <Col span={10} offset={2}>
+
           <Row>
-            <Col span={4}>
-              <Input placeholder="节点 ID" id="nodeId" />
-            </Col>
             <Col span={4}>
               <Select
                 style={{ width: 200 }}
-                onChange={handleChange}
+                onClick={handleChange}
                 placeholder="要更改的属性"
               >
-                <Option value="name">name</Option>
-                <Option value="screenId">screenId</Option>
-                <Option value="attrs">attrs</Option>
+                <Option value="visible">visible</Option>
               </Select>
             </Col>
             <Col span={6}>
               <Input placeholder="新属性值" id="targeValue" />
             </Col>
             <Col span={10}>
-              <Button onClick={updateById}>更改节点信息</Button>
-              <Button onClick={updateRootName}>更新根节点名字</Button>
-              <Button onClick={createNew}>创建随机树</Button>
+              <Button onClick={updateAttr}>更改信息</Button>
+              <Button onClick={createNew(client)}>随机创建编辑器</Button>
             </Col>
           </Row>
 
-          {/* <ComponentTreeWithStore /> */}
+          <[CLASSNAME]WithStore onClick={onClick} />
         </Col>
         <Col span={12}>
           <div id="info" />

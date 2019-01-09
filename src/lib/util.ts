@@ -2,7 +2,7 @@
 export function invariant(check: boolean, message: string, thing?: string) {
   if (!check) {
     throw new Error(
-      '[ide-view] Invariant failed: ' +
+      '[[DEBUGNAME]] Invariant failed: ' +
         message +
         (thing ? " in '" + thing + "'" : '')
     );
@@ -49,3 +49,8 @@ export function pick(object: any, paths: string[]) {
   }
   return obj;
 } 
+
+export function capitalize(str: string) {
+  if (!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}

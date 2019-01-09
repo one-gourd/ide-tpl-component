@@ -1,5 +1,5 @@
 var Debug = require('debug');
-var debug = Debug('context-menu');
+var debug = Debug('[DEBUGNAME]');
 
 // 基本 log 构造函数
 // 添加一些基本的注释，方面理解；
@@ -10,7 +10,7 @@ var debugBase = (type:string, ...notes:string[]) => (...props: string[]) => {
     });
 
     props[0] = str + props[0];
-    Debug(`context-menu:${type}`)(...props);
+    Debug(`[DEBUGNAME]:${type}`)(...props);
 }
 
 var debugMini = debugBase('mini', '普通'); // 普通的日志

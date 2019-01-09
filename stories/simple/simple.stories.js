@@ -2,58 +2,40 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { wInfo } from '../../.storybook/utils';
 
-import { ContextMenu, createModel } from '../../src/';
-import { menuNormalGen } from '../helper';
+import { [CLASSNAME], createModel } from '../../src/';
 
 import mdMobx from './simple-mobx.md';
 import mdPlain from './simple-plain.md';
 
-const menuNormal = menuNormalGen();
-const menuNormalModel = createModel(menuNormal);
+const propsNormal = {
+  visible: true
+};
+const propsModel = createModel(propsNormal);
 
-function onClickItem(key, keyPath, item) {
-  console.log(`当前点击项的 id: ${key}`);
+function onClick(value) {
+  console.log('当前编辑器的值：', value);
 }
 
-const clickBtn = menu => () => {
-  const firstItem = menu.children[0];
-  if (firstItem.setName) {
-    firstItem.setName('hello2');
+const clickBtn = target => () => {
+  if (target && target.setWidth) {
+    target.setWidth(1000);
   } else {
-    firstItem.name = 'hello';
+    target.width = 1000;
   }
 };
 
 storiesOf('基础使用', module)
   .addParameters(wInfo(mdMobx))
-  .addWithJSX('使用 mobx 对象', () => (
+  .addWithJSX('使用 mobx 化的 props', () => (
     <div>
-      <ContextMenu
-        visible={true}
-        menu={menuNormalModel}
-        width={200}
-        left={400}
-        top={100}
-        onClickItem={onClickItem}
-      />
-      <button onClick={clickBtn(menuNormalModel)}>
-        更换首个 item 的 name （会响应）
-      </button>
+      <button onClick={clickBtn(propsModel)}>调整宽度（会响应）</button>
+      <[CLASSNAME] width={propsModel.visible} onClick={onClick} />
     </div>
   ))
   .addParameters(wInfo(mdPlain))
-  .addWithJSX('普通 menu 对象', () => (
+  .addWithJSX('普通 props 对象', () => (
     <div>
-      <ContextMenu
-        visible={true}
-        menu={menuNormal}
-        width={200}
-        left={400}
-        top={100}
-        onClickItem={onClickItem}
-      />
-      <button onClick={clickBtn(menuNormal)}>
-        更换首个 item 的 name （不会响应）
-      </button>
+      <button onClick={clickBtn(propsNormal)}>调整宽度（不会响应）</button>
+      <[CLASSNAME] {...propsNormal} onClick={onClick} />
     </div>
   ));

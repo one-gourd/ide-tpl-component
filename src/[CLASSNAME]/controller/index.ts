@@ -8,7 +8,7 @@ import { router as DelRouter } from '../router/del';
 
 export const AppFactory = function (stores: IStoresModel) {
 
-    const app = new Application({ domain: 'context-menu' });
+    const app = new Application({ domain: '[DEBUGNAME]' });
 
     // 挂载 stores 到上下文中
     app.use((ctx: any, next)=>{

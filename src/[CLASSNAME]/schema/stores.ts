@@ -1,8 +1,8 @@
 import { types, Instance } from 'mobx-state-tree';
-import { MenuModel, IMenuModel } from './index';
+import { [CLASSNAME]Model, I[CLASSNAME]Model } from './index';
 import { createEmptyModel } from './util';
 
-export const STORE_ID_PREIX = 'scm_';
+export const STORE_ID_PREIX = '[IDPREFIX]_';
 
 export const Stores = types
   .model('StoresModel', {
@@ -10,12 +10,15 @@ export const Stores = types
       types.identifier,
       identifier => identifier.indexOf(STORE_ID_PREIX) === 0
     ),
-    menu: MenuModel
+    model: [CLASSNAME]Model
   })
   .actions(self => {
     return {
-      setMenu(menu: IMenuModel) {
-        self.menu = menu;
+      setModel(model: I[CLASSNAME]Model) {
+        self.model = model;
+      },
+      resetToEmpty(){
+        self.model = createEmptyModel();
       }
     };
   });
@@ -29,6 +32,6 @@ let autoId = 1;
 export function StoresFactory(): IStoresModel {
   return Stores.create({
     id: `${STORE_ID_PREIX}${autoId++}`,
-    menu: createEmptyModel()
+    model: createEmptyModel()
   });
 }

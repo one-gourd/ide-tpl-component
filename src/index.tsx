@@ -8,9 +8,9 @@
 // );
 
 
-export * from './ContextMenu/';
-export * from './ContextMenu/schema/';
-export * from './ContextMenu/schema/util';
-export * from './ContextMenu/schema/stores';
+export * from './[CLASSNAME]/';
+export * from './[CLASSNAME]/schema/';
+export * from './[CLASSNAME]/schema/util';
+export * from './[CLASSNAME]/schema/stores';
 
-export * from './ContextMenu/controller/';
+export * from './[CLASSNAME]/controller/';

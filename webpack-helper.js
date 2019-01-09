@@ -6,7 +6,8 @@ const LIB_MAP = {
   'mobx-react': 'mobxReact',
   'mobx-state-tree': 'mobxStateTree',
   'ss-tree': 'ssTree',
-  'styled-components': 'styled'
+  'styled-components': 'styled',
+  'ide-code-editor': 'ideCodeEditor'
 };
 
 const COMMON_LIBS = [

@@ -5,10 +5,12 @@ export const router = new Router();
 
 // 默认获取所有的节点，可以通过 filter 返回指定的属性值
 // 比如 /nodes?filter=name,screenId ，返回的集合只有这两个属性
-(router as any).get('nodes', '/nodes', function(ctx: IContext) {
-  const { stores } = ctx;
+(router as any).get('model', '/model', function (ctx: IContext) {
+  const { stores, request } = ctx;
+  const { query } = request;
+  const filterArray = query && query.filter && query.filter.trim().split(',');
   ctx.response.body = {
-    node: stores.resetToEmpty()
+    items: stores.model.allAttibuteWithFilter(filterArray)
   };
   ctx.response.status = 200;
 });
