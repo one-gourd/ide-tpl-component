@@ -10,7 +10,7 @@ export const router = new Router();
   const { query } = request;
   const filterArray = query && query.filter && query.filter.trim().split(',');
   ctx.response.body = {
-    items: stores.model.allAttibuteWithFilter(filterArray)
+    attributes: stores.model.allAttibuteWithFilter(filterArray)
   };
   ctx.response.status = 200;
 });

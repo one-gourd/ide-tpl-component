@@ -21,7 +21,13 @@ export interface I[CLASSNAME]Props extends I[CLASSNAME]Event {
   /**
    * 是否展现
    */
-  visible: boolean;
+  visible?: boolean;
+
+  /**
+   * 文案
+   */
+  text?: string;
+
 }
 
 // 推荐使用 decorator 的方式，否则 stories 的导出会缺少 **Prop Types** 的说明
@@ -35,14 +41,14 @@ export class [CLASSNAME] extends Component<I[CLASSNAME]Props> {
     // this.root = React.createRef();
   }
   render() {
-    const { onClick, visible } = this.props;
+    const { onClick, visible, text } = this.props;
     return (
       <StyledContainer
         visible={visible}
         // ref={this.root}
         className="[CLASSNAME]-container"
       >
-        <Button onClick={onClick}>点我试试</Button>
+        <Button onClick={onClick}>{text || '点我试试'}</Button>
       </StyledContainer>
     );
   }
@@ -57,7 +63,7 @@ const onClickWithStore = (stores: IStoresModel, onClick: (newValue: string,
   newValue: string,
   e: any
 ) => {
-  stores.setValue(newValue);
+  // stores.setValue(newValue);
   onClick && onClick(newValue, e);
 };
 /**
@@ -67,10 +73,11 @@ const onClickWithStore = (stores: IStoresModel, onClick: (newValue: string,
 export const [CLASSNAME]AddStore = (stores: IStoresModel) =>
   observer(function [CLASSNAME]WithStore(props: I[CLASSNAME]Props) {
     const { onClick, visible, ...otherPops } = this.props;
+    const {model} = stores;
     return (
       <[CLASSNAME]
-        visible={stores.visible}
-        onClick = {onClickWithStore}
+        visible = {model.visible}
+        onClick = {onClickWithStore(stores, onClick)}
         { ...otherPops}
       />
     );

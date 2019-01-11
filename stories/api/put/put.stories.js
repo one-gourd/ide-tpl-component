@@ -51,9 +51,9 @@ function updateAttr() {
         client.get(`/model`).then(res => {
           const { status, body } = res;
           if (status === 200) {
-            const config = body.config || {};
+            const attributes = body.attributes || {};
             document.getElementById('info').innerText =
-              `更新操作：; \n` + JSON.stringify(config, null, 4);
+              `更新操作：; \n` + JSON.stringify(attributes, null, 4);
           }
         });
       }
@@ -71,13 +71,14 @@ storiesOf('API - put', module)
         <Col span={10} offset={2}>
 
           <Row>
-            <Col span={4}>
+            <Col span={6}>
               <Select
                 style={{ width: 200 }}
-                onClick={handleChange}
+                onChange={handleChange}
                 placeholder="要更改的属性"
               >
                 <Option value="visible">visible</Option>
+                <Option value="text">text</Option>
               </Select>
             </Col>
             <Col span={6}>
@@ -85,7 +86,7 @@ storiesOf('API - put', module)
             </Col>
             <Col span={10}>
               <Button onClick={updateAttr}>更改信息</Button>
-              <Button onClick={createNew(client)}>随机创建编辑器</Button>
+              <Button onClick={createNew(client)}>随机创建</Button>
             </Col>
           </Row>
 

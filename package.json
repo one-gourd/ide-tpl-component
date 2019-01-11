@@ -11,8 +11,7 @@
     "build-storybook": "build-storybook -c .storybook",
     "release": "standard-version",
     "dev": "webpack-dev-server --config webpack.dev.js",
-    "dist": "webpack --config webpack.prod.js",
-    "prepublish": "npm run dist",
+    "build": "webpack --config webpack.prod.js",
     "storybook": "start-storybook -p 9001 -c .storybook"
   },
   "keywords": [],

@@ -24,17 +24,17 @@ const styles = {
   }
 };
 
-let config = {};
+let attributes = {};
 
 const getInfo = (client, filter) => () => {
   const query = filter && filter.length ? `filter=${filter.join(',')}` : '';
   client.get(`/model?${query}`).then(res => {
     const { status, body } = res;
     if (status === 200) {
-      config = body.config;
+      attributes = body.attributes;
     }
 
-    document.getElementById('info').innerText = JSON.stringify(config, null, 4);
+    document.getElementById('info').innerText = JSON.stringify(attributes, null, 4);
   });
 };
 
@@ -53,7 +53,7 @@ storiesOf('API - get', module)
       <Row style={styles.demoWrap}>
         <Col span={10} offset={2}>
           <Button onClick={getInfo(client1)}>获取信息</Button>
-          <Button onClick={getInfo(client1, ['width', 'value'])}>
+          <Button onClick={getInfo(client1, ['visible'])}>
             获取指定信息(width, value)
           </Button>
           <Button onClick={createNew(client1)}>随机创建</Button>

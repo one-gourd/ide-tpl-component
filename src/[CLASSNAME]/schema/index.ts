@@ -16,6 +16,7 @@ import { updateModelAttribute } from './util';
 export const [CLASSNAME]Model = types
   .model('[CLASSNAME]Model', {
     visible: types.optional(types.boolean, true),
+    text: types.optional(types.string, ''),
     // language: types.optional(
     //   types.enumeration('Type', CODE_LANGUAGES),
     //   ECodeLanguage.JS
@@ -38,6 +39,9 @@ export const [CLASSNAME]Model = types
   })
   .actions(self => {
     return {
+      setText(text: string) {
+        self.text = text;
+      },
       setVisible(v: boolean | string) {
         self.visible = v === true || v === 'true'
       }

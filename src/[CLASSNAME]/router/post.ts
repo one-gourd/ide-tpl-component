@@ -8,9 +8,9 @@ export const router = new Router();
 // 创新新的 model 
 (router as any).post('model', '/model', function (ctx: IContext) {
   const { stores, request } = ctx;
-  const { config } = request.data;
+  const { model } = request.data;
 
-  stores.setModel(createModel(config));
+  stores.setModel(createModel(model));
   // stores.setSchema(createSchemaModel(schema));
 
   ctx.response.status = 200;
