@@ -8,7 +8,7 @@ import mdPlain from './simple-plain.md';
 
 const propsNormal = {
   visible: true,
-  text: 'hello world'
+  text: ''
 };
 const propsModel = createModel(propsNormal);
 
@@ -18,9 +18,9 @@ function onClick(value) {
 
 const clickBtn = target => () => {
   if (target && target.setVisible) {
-    target.setVisible(false);
+    target.setText('hello world');
   } else {
-    target.visible = false;
+    target.text = 'hello world';
   }
 };
 

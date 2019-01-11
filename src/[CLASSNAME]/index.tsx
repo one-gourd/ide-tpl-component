@@ -77,6 +77,7 @@ export const [CLASSNAME]AddStore = (stores: IStoresModel) =>
     return (
       <[CLASSNAME]
         visible = {model.visible}
+        text = {model.text}
         onClick = {onClickWithStore(stores, onClick)}
         { ...otherPops}
       />
