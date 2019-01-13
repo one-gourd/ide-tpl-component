@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { Button } from 'antd';
 
-import { StoresFactory, IStoresModel } from './schema/stores';
-import { AppFactory } from './controller/index';
 import { debugInteract } from '../lib/debug';
-import { I[CLASSNAME]Model} from './schema';
 import { StyledContainer } from './styles';
+import { AppFactory } from './controller/index';
+import { I[CLASSNAME]Model} from './schema';
+import { StoresFactory, IStoresModel } from './schema/stores';
 
 
 export interface I[CLASSNAME]Event {
@@ -46,7 +46,7 @@ export class [CLASSNAME] extends Component<I[CLASSNAME]Props> {
       <StyledContainer
         visible={visible}
         // ref={this.root}
-        className="[CLASSNAME]-container"
+        className="[NAME]-container"
       >
         <Button onClick={onClick}>{text || '点我试试'}</Button>
       </StyledContainer>
@@ -72,7 +72,7 @@ const onClickWithStore = (stores: IStoresModel, onClick: (newValue: string,
  */
 export const [CLASSNAME]AddStore = (stores: IStoresModel) =>
   observer(function [CLASSNAME]WithStore(props: I[CLASSNAME]Props) {
-    const { onClick, visible, ...otherPops } = this.props;
+    const { onClick, visible, ...otherPops } = props;
     const {model} = stores;
     return (
       <[CLASSNAME]

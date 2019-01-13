@@ -10,6 +10,6 @@ const props: I[CLASSNAME]Props = {
   visible: true
 }
 
-render(< [CLASSNAME] {...props} onClick={onClick} />, document.getElementById(
+render(<[CLASSNAME] {...props} onClick={onClick} />, document.getElementById(
   'example'
 ) as HTMLElement);

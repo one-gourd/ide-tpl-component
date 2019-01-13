@@ -1,6 +1,6 @@
 import Router from 'ette-router';
-import { IContext } from './helper';
 
+import { IContext } from './helper';
 import { createModel } from '../schema/util';
 
 export const router = new Router();

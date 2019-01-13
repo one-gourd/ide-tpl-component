@@ -1,5 +1,7 @@
 import Router from 'ette-router';
+
 import { IContext } from './helper';
+
 export const router = new Router();
 // 更新菜单项属性
 (router as any).put('model', '/model', function(ctx: IContext) {

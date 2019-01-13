@@ -2,7 +2,7 @@ var Debug = require('debug');
 var debug = Debug('[DEBUGNAME]');
 
 // 基本 log 构造函数
-// 添加一些基本的注释，方面理解；
+// 添加一些基本的注释，方便理解；
 var debugBase = (type:string, ...notes:string[]) => (...props: string[]) => {
     let str = '';
     [].concat(notes).forEach(note => {

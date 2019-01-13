@@ -1,4 +1,5 @@
 import { types, destroy, IAnyModelType, Instance } from 'mobx-state-tree';
+
 import { debugModel } from '../../lib/debug';
 import { invariant, capitalize } from '../../lib/util';
 import { I[CLASSNAME]Props, I[CLASSNAME]Model, [CLASSNAME]Model, IStoresModel } from '../../index';

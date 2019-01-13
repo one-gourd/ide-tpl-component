@@ -1,6 +1,7 @@
 import { types, Instance } from 'mobx-state-tree';
-import { [CLASSNAME]Model, I[CLASSNAME]Model } from './index';
+
 import { createEmptyModel } from './util';
+import { [CLASSNAME]Model, I[CLASSNAME]Model } from './index';
 
 export const STORE_ID_PREIX = '[IDPREFIX]_';
 

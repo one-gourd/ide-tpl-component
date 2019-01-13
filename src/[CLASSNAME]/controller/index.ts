@@ -1,4 +1,5 @@
 import Application from 'ette';
+
 import { IStoresModel } from '../schema/stores';
 import { router as GetRouter } from '../router/get';
 import { router as PostRouter } from '../router/post';
