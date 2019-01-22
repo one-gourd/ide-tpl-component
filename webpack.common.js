@@ -9,7 +9,7 @@ const commontConfig = {
   node: {
     fs: 'empty'
   },
-  externals: getExternal([EXTERNALS], false),
+  externals: getExternal([EXTERNALS]),
   module: {
     rules: [
       {

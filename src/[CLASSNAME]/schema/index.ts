@@ -52,7 +52,7 @@ export const [CLASSNAME]Model = types
   .actions(self => {
     return {
       updateAttribute(name: string, value: any) {
-        updateModelAttribute(self as I[CLASSNAME]Model, name, value);
+        return updateModelAttribute(self as I[CLASSNAME]Model, name, value);
       }
     };
   });

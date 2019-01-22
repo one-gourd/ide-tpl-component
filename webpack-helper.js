@@ -39,6 +39,16 @@ const COMMON_EXTERNALS = {
   }
 };
 
+
+const ALL_EXTERNALS = Object.assign({}, COMMON_EXTERNALS, {
+  'ide-code-editor': {
+    commonjs: 'ide-code-editor',
+    commonjs2: 'ide-code-editor',
+    amd: 'ide-code-editor',
+    root: 'ideCodeEditor'
+  }
+})
+
 const COMMON_LIBS = Object.keys(COMMON_EXTERNALS);
 
 module.exports = {
@@ -48,8 +58,8 @@ module.exports = {
     const externals = {};
     libs.forEach(lib => {
       externals[lib] = directUse
-        ? COMMON_EXTERNALS[lib]
-        : (COMMON_EXTERNALS[lib] && COMMON_EXTERNALS[lib].root) || lib;
+        ? ALL_EXTERNALS[lib]
+        : (ALL_EXTERNALS[lib] && ALL_EXTERNALS[lib].root) || lib;
     });
     return externals;
   }

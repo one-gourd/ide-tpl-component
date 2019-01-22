@@ -2,20 +2,18 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { Button } from 'antd';
 
-import { debugInteract } from '../lib/debug';
+import { debugInteract, debugRender } from '../lib/debug';
 import { StyledContainer } from './styles';
 import { AppFactory } from './controller/index';
-import { I[CLASSNAME]Model} from './schema';
+import { I[CLASSNAME]Model } from './schema';
 import { StoresFactory, IStoresModel } from './schema/stores';
-
 
 export interface I[CLASSNAME]Event {
   /**
    * 点击回调函数
    */
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
-
 
 export interface I[CLASSNAME]Props extends I[CLASSNAME]Event {
   /**
@@ -27,7 +25,6 @@ export interface I[CLASSNAME]Props extends I[CLASSNAME]Event {
    * 文案
    */
   text?: string;
-
 }
 
 // 推荐使用 decorator 的方式，否则 stories 的导出会缺少 **Prop Types** 的说明
@@ -40,15 +37,21 @@ export class [CLASSNAME] extends Component<I[CLASSNAME]Props> {
     this.state = {};
     // this.root = React.createRef();
   }
+  onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { onClick } = this.props;
+    onClick && onClick(e);
+  };
   render() {
-    const { onClick, visible, text } = this.props;
+    const { visible, text } = this.props;
     return (
       <StyledContainer
         visible={visible}
         // ref={this.root}
         className="[NAME]-container"
       >
-        <Button onClick={onClick}>{text || '点我试试'}</Button>
+        <Button onClick={this.onClick}>
+          {text || '点我试试'}
+        </Button>
       </StyledContainer>
     );
   }
@@ -58,13 +61,12 @@ export class [CLASSNAME] extends Component<I[CLASSNAME]Props> {
     以下是专门配合 store 时的组件版本
 ----------------------------------------------------- */
 
-const onClickWithStore = (stores: IStoresModel, onClick: (newValue: string,
-  e: any)=> void) => (
-  newValue: string,
-  e: any
-) => {
+const onClickWithStore = (
+  stores: IStoresModel,
+  onClick: React.MouseEventHandler<HTMLButtonElement>
+) => (e: React.MouseEvent<HTMLButtonElement>) => {
   // stores.setValue(newValue);
-  onClick && onClick(newValue, e);
+  onClick && onClick(e);
 };
 /**
  * 科里化创建 [CLASSNAME]WithStore 组件
@@ -73,13 +75,14 @@ const onClickWithStore = (stores: IStoresModel, onClick: (newValue: string,
 export const [CLASSNAME]AddStore = (stores: IStoresModel) =>
   observer(function [CLASSNAME]WithStore(props: I[CLASSNAME]Props) {
     const { onClick, visible, ...otherPops } = props;
-    const {model} = stores;
+    const { model } = stores;
+    debugRender(`[${stores.id}] rendering`);
     return (
       <[CLASSNAME]
-        visible = {model.visible}
-        text = {model.text}
-        onClick = {onClickWithStore(stores, onClick)}
-        { ...otherPops}
+        visible={model.visible}
+        text={model.text}
+        onClick={onClickWithStore(stores, onClick)}
+        {...otherPops}
       />
     );
   });
