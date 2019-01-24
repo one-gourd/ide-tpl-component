@@ -18,7 +18,14 @@ web 方式：
 > 如果你想要在 webpack 中 external 该库，可以使用以下配置：
 ```js
 {
-    externals: {"[NAME]": "[LIBNAME]"}
+    externals: {
+        "[NAME]": {
+            "commonjs": "[NAME]",
+            "commonjs2": "[NAME]",
+            "amd": "[NAME]",
+            "root": "[LIBNAME]"
+        }
+    }
 }
 ```
 

@@ -22,24 +22,6 @@ export function uniq(arr: any[]) {
   return res;
 }
 
-/**
- * convert string map to object
- *
- * @export
- * @param {Map<string, any>} strMap
- * @returns
- */
-export function strMapToObj(strMap: Map<string, any>) {
-  let obj = Object.create(null);
-  for (let [k, v] of strMap) {
-    // We don’t escape the key '__proto__'
-    // which can cause problems on older engines
-    obj[k] = v;
-  }
-  return obj;
-}
-
-
 export function pick(object: any, paths: string[]) {
   const obj: any = {};
   for (const path of paths) {
@@ -53,4 +35,10 @@ export function pick(object: any, paths: string[]) {
 export function capitalize(str: string) {
   if (!str) return '';
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export function isPlainObject(value: any) {
+  if (value === null || typeof value !== 'object') return false;
+  var proto = Object.getPrototypeOf(value);
+  return proto === Object.prototype || proto === null;
 }

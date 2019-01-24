@@ -1,5 +1,3 @@
-import { types, destroy, IAnyModelType, Instance } from 'mobx-state-tree';
-
 import { debugModel } from '../../lib/debug';
 import { invariant, capitalize } from '../../lib/util';
 import { I[CLASSNAME]Props, I[CLASSNAME]Model, [CLASSNAME]Model, IStoresModel } from '../../index';
@@ -52,7 +50,8 @@ const update = (valueSet: string[]) => (
 // 定义 menu 可更新信息的属性
 const EDITABLE_ATTRIBUTE = [
   'visible',
-  'text'
+  'text',
+  'styles'
 ];
 
 export const updateModelAttribute = update(EDITABLE_ATTRIBUTE);

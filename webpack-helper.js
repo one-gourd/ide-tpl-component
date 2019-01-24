@@ -25,12 +25,6 @@ const COMMON_EXTERNALS = {
     amd: 'mobx-state-tree',
     root: 'mobxStateTree'
   },
-  'ss-tree': {
-    commonjs: 'ss-tree',
-    commonjs2: 'ss-tree',
-    amd: 'ss-tree',
-    root: 'ssTree'
-  },
   'styled-components': {
     commonjs: 'styled-components',
     commonjs2: 'styled-components',
@@ -41,13 +35,19 @@ const COMMON_EXTERNALS = {
 
 
 const ALL_EXTERNALS = Object.assign({}, COMMON_EXTERNALS, {
+  'ss-tree': {
+    commonjs: 'ss-tree',
+    commonjs2: 'ss-tree',
+    amd: 'ss-tree',
+    root: 'ssTree'
+  },
   'ide-code-editor': {
     commonjs: 'ide-code-editor',
     commonjs2: 'ide-code-editor',
     amd: 'ide-code-editor',
     root: 'ideCodeEditor'
   }
-})
+});
 
 const COMMON_LIBS = Object.keys(COMMON_EXTERNALS);
 

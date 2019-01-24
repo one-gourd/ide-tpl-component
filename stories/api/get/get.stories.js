@@ -53,8 +53,8 @@ storiesOf('API - get', module)
       <Row style={styles.demoWrap}>
         <Col span={10} offset={2}>
           <Button onClick={getInfo(client1)}>获取信息</Button>
-          <Button onClick={getInfo(client1, ['visible'])}>
-            获取指定信息(width, value)
+          <Button onClick={getInfo(client1, ['styles', 'visible'])}>
+            获取指定信息(styles, visible)
           </Button>
           <Button onClick={createNew(client1)}>随机创建</Button>
 

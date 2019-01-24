@@ -21,7 +21,7 @@
   },
   "keywords": [],
   "author": "[AUTHOR]",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@dump247/storybook-state": "^1.5.2",
@@ -79,7 +79,6 @@
     "mobx-react": "5.x",
     "mobx-state-tree": "3.x",
     "react": "16.x",
-    "react-dom": "16.x",
-    "ss-tree": "1.x"
+    "react-dom": "16.x"
   }
 }
