@@ -24,7 +24,7 @@ export interface I[CLASSNAME]Styles extends IStyles {
   container?: React.CSSProperties;
 }
 
-export I[CLASSNAME]Props extends I[CLASSNAME]Event{
+export interface I[CLASSNAME]Props extends I[CLASSNAME]Event{
   /**
    * 是否展现
    */
@@ -115,7 +115,7 @@ export const [CLASSNAME]AddStore = (stores: IStoresModel) => {
     return (
       <[CLASSNAME]
         {...controlledProps}
-        {...otherPops}
+        {...otherProps}
       />
     );
   });

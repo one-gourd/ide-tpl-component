@@ -21,7 +21,7 @@ router.put('model', '/model', function(ctx: IContext) {
 
 
 // 更新 css 属性
-router.put('iframe', '/model/styles/:target', function (ctx: IContext) {
+router.put('model', '/model/styles/:target', function (ctx: IContext) {
   const { stores, request } = ctx;
   const { style } = request.data;
   const { target } = ctx.params;

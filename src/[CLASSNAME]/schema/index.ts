@@ -1,4 +1,4 @@
-import { types, Instance, IAnyModelType, applySnapshot } from 'mobx-state-tree';
+import { types, Instance, IAnyModelType, applySnapshot, SnapshotOrInstance } from 'mobx-state-tree';
 
 import { pick } from '../../lib/util';
 import { debugModel } from '../../lib/debug';
@@ -151,7 +151,7 @@ export interface I[CLASSNAME]Model extends Instance<typeof [CLASSNAME]Model> { }
 
 // 获取被 store 控制的 key 的列表
 export type T[CLASSNAME]ControlledKeys =
-  | keyof SnapshotOrInstance <typeof I[CLASSNAME]Model>
+  | keyof SnapshotOrInstance <typeof [CLASSNAME]Model>
   | 'styles';
 
 // 定义被 store 控制的 key 的列表，没法借用 ts 的能力动态从 TIFrameControlledKeys 中获取
