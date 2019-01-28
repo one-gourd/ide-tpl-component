@@ -13,6 +13,7 @@ const { Option } = Select;
 const styles = {
   demoWrap: {
     display: 'flex',
+    flexDirection: 'column',
     width: '100%'
   }
 };
@@ -99,7 +100,7 @@ storiesOf('API - put', module)
         </Row>
 
         <Col span={24}>
-          <[CLASSNAME]WithStore1 onClick={onClick} />
+          <[CLASSNAME]WithStore onClick={onClick} />
         </Col>
       </Row>
     );

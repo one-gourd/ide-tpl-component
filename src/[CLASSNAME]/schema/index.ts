@@ -10,7 +10,7 @@ import {
 import { pick } from '../../lib/util';
 import { debugModel } from '../../lib/debug';
 import { updateModelAttribute } from './util';
-import { IStyles } from '../index';
+import { IStyles, I[CLASSNAME]Theme } from '../index';
 
 // export enum ECodeLanguage {
 //   JSON = 'json',
