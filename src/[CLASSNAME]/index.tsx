@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { Button } from 'antd';
+import { ThemeProvider } from 'styled-components';
+
 
 import { debugInteract, debugRender } from '../lib/debug';
 import { StyledContainer } from './styles';
@@ -24,6 +26,11 @@ export interface I[CLASSNAME]Styles extends IStyles {
   container?: React.CSSProperties;
 }
 
+export interface I[CLASSNAME]Theme {
+  main: string;
+  [prop: string]: any;
+}
+
 export interface I[CLASSNAME]Props extends I[CLASSNAME]Event{
   /**
    * 是否展现
@@ -39,26 +46,30 @@ export interface I[CLASSNAME]Props extends I[CLASSNAME]Event{
    * 样式集合，方便外部控制
    */
   styles?: I[CLASSNAME]Styles;
+
+  /**
+   * 设置主题
+   */
+  theme?: I[CLASSNAME]Theme;
+
 };
 
-// 定义被 store 控制的 key 的列表
-export const IIFrameControlledKeys: string[] = [
-  'visible',
-  'text',
-  'styles'
-];
 
+export const DEFAULT_PROPS: I[CLASSNAME]Props = {
+  visible: true,
+  theme: {
+    main: '#25ab68'
+  },
+  styles: {
+    container: {}
+  }
+};
 
 // 推荐使用 decorator 的方式，否则 stories 的导出会缺少 **Prop Types** 的说明
 // 因为 react-docgen-typescript-loader 需要  named export 导出方式
 @observer
 export class [CLASSNAME] extends Component<I[CLASSNAME]Props> {
-  public static defaultProps = {
-    visible: true,
-    styles: {
-      container:{}
-    }
-  };
+  public static defaultProps = DEFAULT_PROPS;
   // private root: React.RefObject<HTMLDivElement>;
   constructor(props: I[CLASSNAME]Props) {
     super(props);
@@ -70,18 +81,20 @@ export class [CLASSNAME] extends Component<I[CLASSNAME]Props> {
     onClick && onClick(e);
   };
   render() {
-    const { visible, text, styles } = this.props;
+    const { visible, text, styles, theme } = this.props;
     return (
-      <StyledContainer
-        style={styles.container}
-        visible={visible}
-        // ref={this.root}
-        className="[NAME]-container"
-      >
-        <Button onClick={this.onClick}>
-          {text || '点我试试'}
-        </Button>
-      </StyledContainer>
+      <ThemeProvider theme={theme}>      
+        <StyledContainer
+          style={styles.container}
+          visible={visible}
+          // ref={this.root}
+          className="[NAME]-container"
+        >
+          <Button onClick={this.onClick}>
+            {text || '点我试试'}
+          </Button>
+        </StyledContainer>
+      </ThemeProvider>
     );
   }
 }
@@ -105,7 +118,7 @@ const onClickWithStore = (
  */
 export const [CLASSNAME]AddStore = (stores: IStoresModel) => {
   return observer(function [CLASSNAME]WithStore(props: Omit<I[CLASSNAME]Props, T[CLASSNAME]ControlledKeys>) {
-    const {onClick, ...otherProps} = this.props;
+    const {onClick, ...otherProps} = props;
     const { model } = stores;
     const controlledProps: any = {};
     CONTROLLED_KEYS.forEach((storeKey: string) => {

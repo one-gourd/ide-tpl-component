@@ -1,7 +1,7 @@
-import { types, Instance } from 'mobx-state-tree';
+import { cast, types, Instance, SnapshotOrInstance } from 'mobx-state-tree';
 
 import { createEmptyModel } from './util';
-import { [CLASSNAME]Model, I[CLASSNAME]Model } from './index';
+import { [CLASSNAME]Model } from './index';
 
 export const STORE_ID_PREIX = '[IDPREFIX]_';
 
@@ -15,8 +15,8 @@ export const Stores = types
   })
   .actions(self => {
     return {
-      setModel(model: I[CLASSNAME]Model) {
-        self.model = model;
+      setModel(model: SnapshotOrInstance<typeof self.model>) {
+        self.model = cast(model);
       },
       resetToEmpty(){
         self.model = createEmptyModel();
@@ -33,6 +33,6 @@ let autoId = 1;
 export function StoresFactory(): IStoresModel {
   return Stores.create({
     id: `${STORE_ID_PREIX}${autoId++}`,
-    model: createEmptyModel()
+    model: createEmptyModel() as any
   });
 }

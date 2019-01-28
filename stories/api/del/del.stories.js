@@ -16,6 +16,7 @@ const {
 const styles = {
   demoWrap: {
     display: 'flex',
+    'flexDirection': 'column',
     width: '100%'
   }
 };
@@ -38,18 +39,23 @@ storiesOf('API - del', module)
   .addWithJSX('/model 重置', () => {
     return (
       <Row style={styles.demoWrap}>
-        <Col span={10} offset={2}>
-          <Row>
-            <Col span={20}>
-              <Button onClick={resetSchema(client1)}>重置</Button>
-              <Button onClick={createNew(client1)}>随机创建</Button>
-            </Col>
-          </Row>
 
+        <Row type="flex" justify="space-between" align="top">        
+          <Col span={10} offset={2}>
+            <Row>
+              <Col span={20}>
+                <Button onClick={resetSchema(client1)}>重置</Button>
+                <Button onClick={createNew(client1)}>随机创建</Button>
+              </Col>
+            </Row>
+          </Col>
+          <Col span={12}>
+            <div id="info" />
+          </Col>
+        </Row>
+
+        <Col span={24}>
           <[CLASSNAME]WithStore1 onClick={onClick} />
-        </Col>
-        <Col span={12}>
-          <div id="info" />
         </Col>
       </Row>
     );

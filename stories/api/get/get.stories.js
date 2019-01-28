@@ -51,17 +51,20 @@ storiesOf('API - get', module)
   .addWithJSX('/model 获取属性信息', () => {
     return (
       <Row style={styles.demoWrap}>
-        <Col span={10} offset={2}>
-          <Button onClick={getInfo(client1)}>获取信息</Button>
-          <Button onClick={getInfo(client1, ['styles', 'visible'])}>
-            获取指定信息(styles, visible)
-          </Button>
-          <Button onClick={createNew(client1)}>随机创建</Button>
-
+        <Row type="flex" justify="space-between" align="top">       
+          <Col span={10} offset={2}>
+            <Button onClick={getInfo(client1)}>获取信息</Button>
+            <Button onClick={getInfo(client1, ['styles', 'visible'])}>
+              获取指定信息(styles, visible)
+            </Button>
+            <Button onClick={createNew(client1)}>随机创建</Button>
+          </Col>
+          <Col span={12}>
+            <div id="info" />
+          </Col>
+        </Row>
+        <Col span={24}>
           <[CLASSNAME]WithStore1 onClick={onClick} />
-        </Col>
-        <Col span={12}>
-          <div id="info" />
         </Col>
       </Row>
     );

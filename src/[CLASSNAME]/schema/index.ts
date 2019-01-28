@@ -1,4 +1,11 @@
-import { types, Instance, IAnyModelType, applySnapshot, SnapshotOrInstance } from 'mobx-state-tree';
+import {
+  cast,
+  types,
+  Instance,
+  IAnyModelType,
+  applySnapshot,
+  SnapshotOrInstance
+} from 'mobx-state-tree';
 
 import { pick } from '../../lib/util';
 import { debugModel } from '../../lib/debug';
@@ -35,6 +42,21 @@ const StyleModel = types
   });
 
 
+
+// 获取被 store 控制的 key 的列表
+export type T[CLASSNAME]ControlledKeys =
+  | keyof SnapshotOrInstance < typeof [CLASSNAME]Model >
+  | 'styles' | 'theme';
+
+// 定义被 store 控制的 key 的列表，没法借用 ts 的能力动态从 TIFrameControlledKeys 中获取
+export const CONTROLLED_KEYS: string[] = [
+  'visible',
+  'text',
+  'theme',
+  'styles',
+];
+
+
 /**
  * [CLASSNAME] 对应的模型
  */
@@ -42,6 +64,7 @@ export const [CLASSNAME]Model = types
   .model('[CLASSNAME]Model', {
     visible: types.optional(types.boolean, true),
     text: types.optional(types.string, ''),
+    _theme: types.map(types.union(types.number, types.string, types.boolean)),
     _styles: types.map(types.late((): IAnyModelType => StyleModel))
     // language: types.optional(
     //   types.enumeration('Type', CODE_LANGUAGES),
@@ -68,11 +91,14 @@ export const [CLASSNAME]Model = types
         return styles;
       },
 
+      get theme() {
+        return self._theme.toJSON();
+      },
+
       /**
        * 只返回当前模型的属性，可以通过 filter 字符串进行属性项过滤
        */
-      allAttibuteWithFilter(filterArray?: string | string[]) {
-        if (!filterArray) return self;
+      allAttibuteWithFilter(filterArray: string | string[] = CONTROLLED_KEYS) {
         const filters = [].concat(filterArray || []);
         return pick(self, filters);
       }
@@ -86,6 +112,12 @@ export const [CLASSNAME]Model = types
       setVisible(v: boolean | string) {
         self.visible = v === true || v === 'true'
       },
+
+
+      setTheme(theme: I[CLASSNAME]Theme) {
+        self._theme = cast(theme);
+      },
+
       // 生成一个新的 style
       setStyle(name: string, style: React.CSSProperties) {
         const styleModel = StyleModel.create({});
@@ -143,21 +175,32 @@ export const [CLASSNAME]Model = types
         }
 
         return result;
+      },
+
+      /**
+       * 更新 theme 指定变量
+       * @param target - theme 变量名
+       * @param value - 变量值
+       */
+      updateTheme(target: string, value: any) {
+        const result = {
+          message: '',
+          success: false
+        };
+        let keys = [...self._theme.keys()];
+
+        if (!target) {
+          result.message = `请传入要更改的 theme 变量`;
+        } else if (!self._theme.has(target)) {
+          result.message = `theme 对象中不存在 ${target} 变量（支持的变量列表：[${keys}]）`;
+        } else {
+          self._theme.set(target, value);
+          result.success = true;
+        }
+        return result;
       }
     };
   });
 
 export interface I[CLASSNAME]Model extends Instance<typeof [CLASSNAME]Model> { }
-
-// 获取被 store 控制的 key 的列表
-export type T[CLASSNAME]ControlledKeys =
-  | keyof SnapshotOrInstance <typeof [CLASSNAME]Model>
-  | 'styles';
-
-// 定义被 store 控制的 key 的列表，没法借用 ts 的能力动态从 TIFrameControlledKeys 中获取
-export const CONTROLLED_KEYS: string[] = [
-  'visible',
-  'text',
-  'styles',
-];
 

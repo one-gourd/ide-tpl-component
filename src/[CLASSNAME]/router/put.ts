@@ -42,3 +42,13 @@ router.put('model', '/model/styles/:target', function (ctx: IContext) {
   ctx.response.body = result;
   ctx.response.status = 200;
 });
+
+
+// 更新 theme 属性
+router.put('model', '/model/theme/:target', function (ctx: IContext) {
+  const { stores, request } = ctx;
+  const { value } = request.data;
+  const { target } = ctx.params;
+  ctx.response.body = stores.model.updateTheme(target, value);
+  ctx.response.status = 200;
+});

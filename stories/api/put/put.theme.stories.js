@@ -13,47 +13,43 @@ const { Option } = Select;
 const styles = {
   demoWrap: {
     display: 'flex',
+    flexDirection: 'column',
     width: '100%'
   }
-};
-
-let selectedAttrName = '';
-
-const createNew = client => () => {
-  const model = modelPropsGen();
-  client.post('/model', { model: model });
 };
 
 function onClick(value) {
   console.log('当前点击值：', value);
 }
 
-function handleChange(value) {
-  console.log(`selected ${value}`);
-  selectedAttrName = value;
-}
+const createNew = client => () => {
+  const model = modelPropsGen();
+  client.post('/model', { model: model });
+};
 
 
-function updateAttr() {
-  if (!selectedAttrName) {
-    document.getElementById('info').innerText = '请选择要更改的属性';
+function updateCss() {
+  const targetKey = document.getElementById('targetKey').value;
+  if (!targetKey) {
+    document.getElementById('info').innerText = '请输入 theme 变量';
     return;
   }
 
-  const value = document.getElementById('targeValue').value;
-
+  const targetValue = document.getElementById('targetValue').value;
   // 更新节点属性，返回更新后的数值
   client
-    .put(`/model`, { name: selectedAttrName, value: value })
+    .put(`/model/theme/${targetKey}`, { value: targetValue })
     .then(res => {
       const { status, body } = res;
       if (status === 200) {
-        client.get(`/model`).then(res => {
+        const result = body;
+        client.get(`/model?filter=theme`).then(res => {
           const { status, body } = res;
           if (status === 200) {
             const attributes = body.attributes || {};
             document.getElementById('info').innerText =
-              `更新操作：; \n` + JSON.stringify(attributes, null, 4);
+              `更新操作：${result.success} - ${result.message}; \n` +
+              JSON.stringify(attributes, null, 4);
           }
         });
       }
@@ -66,41 +62,33 @@ function updateAttr() {
 
 storiesOf('API - put', module)
   .addParameters(wInfo(mdPut))
-  .addWithJSX('/model 更改属性', () => {
+  .addWithJSX('/model/theme 更改 theme', () => {
     return (
       <Row style={styles.demoWrap}>
-        <Row type="flex" justify="space-between" align="top"> 
+        <Col span={24}>
+          <[CLASSNAME]WithStore
+            onClick={onClick}
+          />
+        </Col>
+        <Row type="flex" justify="space-between" align="top">
           <Col span={10} offset={2}>
             <Row>
               <Col span={6}>
-                <Select
-                  style={{ width: 200 }}
-                  onChange={handleChange}
-                  placeholder="要更改的属性"
-                >
-                  <Option value="visible">visible</Option>
-                  <Option value="text">text</Option>
-                </Select>
-              </Col>
-              <Col span={6}>
-                <Input placeholder="新属性值" id="targeValue" />
+                <Input placeholder="target" id="targetKey" />
               </Col>
               <Col span={10}>
-                <Button onClick={updateAttr}>更改信息</Button>
+                <Input placeholder="target value" id="targetValue" />
+              </Col>
+              <Col span={6}>
+                <Button onClick={updateCss}>更改 theme </Button>
                 <Button onClick={createNew(client)}>随机创建</Button>
               </Col>
             </Row>
-
           </Col>
           <Col span={12}>
             <div id="info" />
           </Col>
-        
         </Row>
-
-        <Col span={24}>
-          <[CLASSNAME]WithStore1 onClick={onClick} />
-        </Col>
       </Row>
     );
   });

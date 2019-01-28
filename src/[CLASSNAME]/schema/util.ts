@@ -1,19 +1,20 @@
 import { debugModel } from '../../lib/debug';
 import { invariant, capitalize } from '../../lib/util';
-import { I[CLASSNAME]Props, I[CLASSNAME]Model, [CLASSNAME]Model, IStoresModel } from '../../index';
+import { I[CLASSNAME]Props, I[CLASSNAME]Model, [CLASSNAME]Model, IStoresModel, DEFAULT_PROPS } from '../../index';
 
 /**
  * 将普通对象转换成 Model
  * @param modelObject - 普通的对象
  */
-export function createModel(modelObject: I[CLASSNAME]Props): I[CLASSNAME]Model {
-  invariant(!!modelObject, 'modelObject 对象不能为空');
+export function createModel(modelObject: I[CLASSNAME]Props = DEFAULT_PROPS): I[CLASSNAME]Model {
+  const mergedProps = Object.assign({}, DEFAULT_PROPS, modelObject);
+  const { visible, text, theme, styles } = mergedProps;
 
   const model = [CLASSNAME]Model.create({
-    visible: modelObject.visible,
-    text: modelObject.text,
+    visible, text
   });
-
+  model.setStyles(styles || {});
+  model.setTheme(theme);
 
   return model;
 }
@@ -51,6 +52,7 @@ const update = (valueSet: string[]) => (
 const EDITABLE_ATTRIBUTE = [
   'visible',
   'text',
+  'theme',
   'styles'
 ];
 

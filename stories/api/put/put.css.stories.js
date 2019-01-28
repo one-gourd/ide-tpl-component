@@ -13,47 +13,52 @@ const { Option } = Select;
 const styles = {
   demoWrap: {
     display: 'flex',
+    flexDirection: 'column',
     width: '100%'
   }
-};
-
-let selectedAttrName = '';
-
-const createNew = client => () => {
-  const model = modelPropsGen();
-  client.post('/model', { model: model });
 };
 
 function onClick(value) {
   console.log('当前点击值：', value);
 }
 
-function handleChange(value) {
-  console.log(`selected ${value}`);
-  selectedAttrName = value;
+const createNew = client => () => {
+  const model = modelPropsGen();
+  client.post('/model', { model: model });
+};
+
+
+let selectedTarget = '';
+
+function handleChangeCss(value) {
+  console.log(`selected target ${value}`);
+  selectedTarget = value;
 }
 
-
-function updateAttr() {
-  if (!selectedAttrName) {
-    document.getElementById('info').innerText = '请选择要更改的属性';
+function updateCss() {
+  if (!selectedTarget) {
+    document.getElementById('info').innerText = '请选择更改对象';
     return;
   }
 
-  const value = document.getElementById('targeValue').value;
-
+  const cssKey = document.getElementById('cssKey').value;
+  const cssValue = document.getElementById('cssValue').value;
+  const style = {};
+  style[cssKey] = cssValue;
   // 更新节点属性，返回更新后的数值
   client
-    .put(`/model`, { name: selectedAttrName, value: value })
+    .put(`/model/styles/${selectedTarget}`, { style: style })
     .then(res => {
       const { status, body } = res;
       if (status === 200) {
-        client.get(`/model`).then(res => {
+        const result = body;
+        client.get(`/model?filter=styles`).then(res => {
           const { status, body } = res;
           if (status === 200) {
             const attributes = body.attributes || {};
             document.getElementById('info').innerText =
-              `更新操作：; \n` + JSON.stringify(attributes, null, 4);
+              `更新操作：${result.success} - ${result.message}; \n` +
+              JSON.stringify(attributes, null, 4);
           }
         });
       }
@@ -66,41 +71,40 @@ function updateAttr() {
 
 storiesOf('API - put', module)
   .addParameters(wInfo(mdPut))
-  .addWithJSX('/model 更改属性', () => {
+  .addWithJSX('/model/styles 更改样式', () => {
     return (
       <Row style={styles.demoWrap}>
-        <Row type="flex" justify="space-between" align="top"> 
+        <Col span={24}>
+          <[CLASSNAME]WithStore
+            onClick={onClick}
+          />
+        </Col>
+        <Row type="flex" justify="space-between" align="top">
           <Col span={10} offset={2}>
             <Row>
               <Col span={6}>
                 <Select
                   style={{ width: 200 }}
-                  onChange={handleChange}
-                  placeholder="要更改的属性"
+                  onChange={handleChangeCss}
+                  placeholder="选择更改的对象"
                 >
-                  <Option value="visible">visible</Option>
-                  <Option value="text">text</Option>
+                  <Option value="container">container</Option>
                 </Select>
               </Col>
-              <Col span={6}>
-                <Input placeholder="新属性值" id="targeValue" />
-              </Col>
               <Col span={10}>
-                <Button onClick={updateAttr}>更改信息</Button>
+                <Input placeholder="css key" id="cssKey" />
+                <Input placeholder="css value" id="cssValue" />
+              </Col>
+              <Col span={6}>
+                <Button onClick={updateCss}>更改样式</Button>
                 <Button onClick={createNew(client)}>随机创建</Button>
               </Col>
             </Row>
-
           </Col>
           <Col span={12}>
             <div id="info" />
           </Col>
-        
         </Row>
-
-        <Col span={24}>
-          <[CLASSNAME]WithStore1 onClick={onClick} />
-        </Col>
       </Row>
     );
   });
