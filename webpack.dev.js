@@ -12,6 +12,13 @@ module.exports = common.map(config => {
     devtool: 'inline-source-map',
     devServer: {
       contentBase: path.join(__dirname, targetDir),
+      [EDITOR_START]
+      proxy: {
+        '/json.worker.js': 'http://localhost:9005/dist/',
+        '/editor.worker.js': 'http://localhost:9005/dist/',
+        '/typescript.worker.js': 'http://localhost:9005/dist/',
+      },
+      [EDITOR_END]
       port: 9000,
       hot: true
     },
