@@ -5,6 +5,7 @@ import { ThemeProvider } from 'styled-components';
 
 
 import { debugInteract, debugRender } from '../lib/debug';
+import { pick } from '../lib/util';
 import { StyledContainer } from './styles';
 import { AppFactory } from './controller/index';
 import { StoresFactory, IStoresModel } from './schema/stores';
@@ -120,10 +121,7 @@ export const [CLASSNAME]AddStore = (stores: IStoresModel) => {
   return observer(function [CLASSNAME]WithStore(props: Omit<I[CLASSNAME]Props, T[CLASSNAME]ControlledKeys>) {
     const {onClick, ...otherProps} = props;
     const { model } = stores;
-    const controlledProps: any = {};
-    CONTROLLED_KEYS.forEach((storeKey: string) => {
-      controlledProps[storeKey] = (model as any)[storeKey];
-    });
+    const controlledProps = pick(model, CONTROLLED_KEYS);
     debugRender(`[${stores.id}] rendering`);
     return (
       <[CLASSNAME]
@@ -138,8 +136,8 @@ export const [CLASSNAME]AddStore = (stores: IStoresModel) => {
  * 用于隔离不同的 [CLASSNAME]WithStore 的上下文
  */
 export const [CLASSNAME]Factory = () => {
-  const stores = StoresFactory(); // 创建 model
-  const app = AppFactory(stores); // 创建 controller，并挂载 model
+  const {stores, innerApps} = StoresFactory(); // 创建 model
+  const app = AppFactory(stores, innerApps); // 创建 controller，并挂载 model
   return {
     stores,
     app,

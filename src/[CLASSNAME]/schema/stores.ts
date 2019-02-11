@@ -18,7 +18,7 @@ export const Stores = types
       setModel(model: SnapshotOrInstance<typeof self.model>) {
         self.model = cast(model);
       },
-      resetToEmpty(){
+      resetToEmpty() {
         self.model = createEmptyModel();
       }
     };
@@ -31,8 +31,25 @@ let autoId = 1;
  * 工厂方法，用于创建 stores
  */
 export function StoresFactory(): IStoresModel {
-  return Stores.create({
+  // const {
+  //   app: codeEditorApp,
+  //   client: codeEditorClient,
+  //   stores: codeEditorStores
+  // } = CodeEditorFactory();
+  const stores = Stores.create({
     id: `${STORE_ID_PREIX}${autoId++}`,
     model: createEmptyModel() as any
-  });
+  }
+  // ,
+  //   {
+  //     codeEditorClient
+  //   }
+  );
+
+  return {
+    stores,
+    innerApps: {
+      // codeEditor: codeEditorApp
+    }
+  }
 }
