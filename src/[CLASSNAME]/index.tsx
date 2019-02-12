@@ -3,6 +3,12 @@ import { observer } from 'mobx-react';
 import { Button } from 'antd';
 import { ThemeProvider } from 'styled-components';
 
+// import {
+//   ISchemaTreeProps,
+//   SchemaTree,
+//   SchemaTreeAddStore,
+//   TSchemaTreeControlledKeys
+// } from 'ide-tree';
 
 import { debugInteract, debugRender } from '../lib/debug';
 import { pick } from '../lib/util';
@@ -11,6 +17,15 @@ import { AppFactory } from './controller/index';
 import { StoresFactory, IStoresModel } from './schema/stores';
 import { T[CLASSNAME]ControlledKeys, CONTROLLED_KEYS } from './schema/index';
 
+type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
+// type OptionalProps<T, K> = T | Omit<T, K>;
+// type OptionalSchemaTreeProps = OptionalProps<
+//   ISchemaTreeProps,
+//   TSchemaTreeControlledKeys
+// >;
+interface ISubComponents {
+  // SchemaTreeComponent: React.ComponentType<OptionalSchemaTreeProps>;
+}
 
 export interface I[CLASSNAME]Event {
   /**
@@ -33,6 +48,11 @@ export interface I[CLASSNAME]Theme {
 }
 
 export interface I[CLASSNAME]Props extends I[CLASSNAME]Event{
+  // /**
+  // * 子组件 schemaTree
+  // */
+  // schemaTree: OptionalSchemaTreeProps;
+
   /**
    * 是否展现
    */
@@ -66,32 +86,29 @@ export const DEFAULT_PROPS: I[CLASSNAME]Props = {
   }
 };
 
-// 推荐使用 decorator 的方式，否则 stories 的导出会缺少 **Prop Types** 的说明
-// 因为 react-docgen-typescript-loader 需要  named export 导出方式
-@observer
-export class [CLASSNAME] extends Component<I[CLASSNAME]Props> {
-  static displayName = '[CLASSNAME]';
-  public static defaultProps = DEFAULT_PROPS;
-  // private root: React.RefObject<HTMLDivElement>;
-  constructor(props: I[CLASSNAME]Props) {
-    super(props);
-    // this.state = {};
-    // this.root = React.createRef();
-  }
-  onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const { onClick } = this.props;
-    onClick && onClick(e);
-  };
-  render() {
-    const { visible, text, styles, theme } = this.props;
+/**
+ * 使用高阶组件打造的组件生成器
+ * @param subComponents - 子组件列表
+ */
+export const [CLASSNAME]HOC = (subComponents: ISubComponents) => {
+  const [CLASSNAME]HOC = (props: I[CLASSNAME]Props = DEFAULT_PROPS) => {
+    // const { SchemaTreeComponent } = subComponents;
+    const { /* schemaTree, */ visible, text, styles, theme } = props;
+
+    const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+      const { onClick } = props;
+      onClick && onClick(e);
+    };
+
     return (
-      <ThemeProvider theme={theme}>      
+      <ThemeProvider theme={theme}>
         <StyledContainer
           style={styles.container}
           visible={visible}
           // ref={this.root}
           className="[NAME]-container"
         >
+          {/* <SchemaTreeComponent {...schemaTree} /> */}
           <Button onClick={this.onClick}>
             {text || '点我试试'}
           </Button>
@@ -99,12 +116,18 @@ export class [CLASSNAME] extends Component<I[CLASSNAME]Props> {
       </ThemeProvider>
     );
   }
-}
+  [CLASSNAME]HOC.displayName = '[CLASSNAME]HOC';
+  return observer([CLASSNAME]HOC);
+};
+
+// 采用高阶组件方式生成普通的 [CLASSNAME] 组件
+export const [CLASSNAME] = [CLASSNAME]HOC({
+  // SchemaTreeComponent: SchemaTree,
+});
 
 /* ----------------------------------------------------
     以下是专门配合 store 时的组件版本
 ----------------------------------------------------- */
-type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
 
 const onClickWithStore = (
   stores: IStoresModel,
@@ -119,20 +142,25 @@ const onClickWithStore = (
  * @param stores - store 模型实例
  */
 export const [CLASSNAME]AddStore = (stores: IStoresModel) => {
-  function [CLASSNAME]WithStore(props: Omit<I[CLASSNAME]Props, T[CLASSNAME]ControlledKeys>) {
-    const {onClick, ...otherProps} = props;
-    const { model } = stores;
+  const [CLASSNAME]HasSubStore = [CLASSNAME]HOC({
+    // SchemaTreeComponent: SchemaTreeAddStore(stores.schemaTree)
+  });
+
+  const [CLASSNAME]WithStore = (props: Omit<I[CLASSNAME]Props, T[CLASSNAME]ControlledKeys>) => {
+    const {/* schemaTree, */ onClick, ...otherProps} = props;
+    const {/* schemaTree, */ model } = stores;
     const controlledProps = pick(model, CONTROLLED_KEYS);
     debugRender(`[${stores.id}] rendering`);
     return (
-      <[CLASSNAME]
+      <[CLASSNAME]HasSubStore
+        // schemaTree={ schemaTree }
         {...controlledProps}
         {...otherProps}
       />
     );
   };
 
-  [CLASSNAME]WithStore.displayName = [CLASSNAME]WithStore;
+  [CLASSNAME]WithStore.displayName = '[CLASSNAME]WithStore';
   return observer([CLASSNAME]WithStore);
 }
 /**
