@@ -43,12 +43,12 @@ const StyleModel = types
 
 
 
-// 获取被 store 控制的 key 的列表
+// 获取被 store 控制的 model key 的列表
 export type T[CLASSNAME]ControlledKeys =
   keyof SnapshotOrInstance < typeof [CLASSNAME]Model>
   | 'styles' | 'theme';
 
-// 定义被 store 控制的 key 的列表，没法借用 ts 的能力动态从 T[CLASSNAME]ControlledKeys 中获取
+// 定义被 store 控制的 model key 的列表，没法借用 ts 的能力动态从 T[CLASSNAME]ControlledKeys 中获取
 export const CONTROLLED_KEYS: string[] = [
   'visible',
   'text',

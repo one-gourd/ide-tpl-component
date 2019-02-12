@@ -5,6 +5,15 @@ import { [CLASSNAME]Model } from './index';
 
 export const STORE_ID_PREIX = '[IDPREFIX]_';
 
+
+// 获取被 store 控制的 key 的列表
+export type TStoresControlledKeys =
+  Exclude<keyof SnapshotOrInstance<typeof Stores>, 'id'>;
+
+export const STORES_CONTROLLED_KEYS: string[] = [
+  'model'
+];
+
 export const Stores = types
   .model('StoresModel', {
     id: types.refinement(

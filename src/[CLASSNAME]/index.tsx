@@ -70,6 +70,7 @@ export const DEFAULT_PROPS: I[CLASSNAME]Props = {
 // 因为 react-docgen-typescript-loader 需要  named export 导出方式
 @observer
 export class [CLASSNAME] extends Component<I[CLASSNAME]Props> {
+  static displayName = '[CLASSNAME]';
   public static defaultProps = DEFAULT_PROPS;
   // private root: React.RefObject<HTMLDivElement>;
   constructor(props: I[CLASSNAME]Props) {
@@ -118,7 +119,7 @@ const onClickWithStore = (
  * @param stores - store 模型实例
  */
 export const [CLASSNAME]AddStore = (stores: IStoresModel) => {
-  return observer(function [CLASSNAME]WithStore(props: Omit<I[CLASSNAME]Props, T[CLASSNAME]ControlledKeys>) {
+  function [CLASSNAME]WithStore(props: Omit<I[CLASSNAME]Props, T[CLASSNAME]ControlledKeys>) {
     const {onClick, ...otherProps} = props;
     const { model } = stores;
     const controlledProps = pick(model, CONTROLLED_KEYS);
@@ -129,7 +130,10 @@ export const [CLASSNAME]AddStore = (stores: IStoresModel) => {
         {...otherProps}
       />
     );
-  });
+  };
+
+  [CLASSNAME]WithStore.displayName = [CLASSNAME]WithStore;
+  return observer([CLASSNAME]WithStore);
 }
 /**
  * 工厂函数，每调用一次就获取一副 MVC
