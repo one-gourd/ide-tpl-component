@@ -1,4 +1,22 @@
 const COMMON_EXTERNALS = {
+  ette: {
+    commonjs: 'ette',
+    commonjs2: 'ette',
+    amd: 'ette',
+    root: 'Ette'
+  },
+  'ette-router': {
+    commonjs: 'ette-router',
+    commonjs2: 'ette-router',
+    amd: 'ette-router',
+    root: 'etteRouter'
+  },
+  'ette-proxy': {
+    commonjs: 'ette-proxy',
+    commonjs2: 'ette-proxy',
+    amd: 'ette-proxy',
+    root: 'etteProxy'
+  },
   react: {
     commonjs: 'react',
     commonjs2: 'react',

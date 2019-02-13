@@ -69,12 +69,13 @@
   },
   "dependencies": {
     "debug": "^4.1.0",
-    "ette": "^0.3.2",
-    "ette-router": "^0.1.3",
     "polished": "^2.3.3"
   },
   "peerDependencies": {
     [PEER]
+    "ette": "0.x",
+    "ette-proxy": "0.x",
+    "ette-router": "0.x",
     "antd": "3.x",
     "mobx": "4.x",
     "mobx-react": "5.x",
