@@ -93,7 +93,8 @@ export const DEFAULT_PROPS: I[CLASSNAME]Props = {
 export const [CLASSNAME]HOC = (subComponents: ISubComponents) => {
   const [CLASSNAME]HOC = (props: I[CLASSNAME]Props = DEFAULT_PROPS) => {
     // const { SchemaTreeComponent } = subComponents;
-    const { /* schemaTree, */ visible, text, styles, theme } = props;
+    const mergedProps = Object.assign({}, DEFAULT_PROPS, props);
+    const { /* schemaTree, */ visible, text, styles, theme } = mergedProps;
 
     const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
       const { onClick } = props;
@@ -115,7 +116,7 @@ export const [CLASSNAME]HOC = (subComponents: ISubComponents) => {
         </StyledContainer>
       </ThemeProvider>
     );
-  }
+  };
   [CLASSNAME]HOC.displayName = '[CLASSNAME]HOC';
   return observer([CLASSNAME]HOC);
 };
