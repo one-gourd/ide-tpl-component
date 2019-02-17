@@ -39,7 +39,7 @@ let autoId = 1;
 /**
  * 工厂方法，用于创建 stores
  */
-export function StoresFactory(): IStoresModel {
+export function StoresFactory() {
   // const {
   //   app: codeEditorApp,
   //   client: codeEditorClient,

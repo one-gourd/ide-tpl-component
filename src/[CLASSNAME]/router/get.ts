@@ -18,7 +18,7 @@ router.get('model', '/model', function (ctx: IContext) {
 
 
 // 返回某个 client 对象
-(router as any).get('clients', '/innerApps/:name', async function (ctx: any) {
+router.get('clients', '/innerApps/:name', async function (ctx: IContext) {
   const { innerApps } = ctx;
   const { name } = ctx.params;
 

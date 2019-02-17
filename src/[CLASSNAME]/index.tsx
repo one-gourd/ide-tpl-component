@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import { Button } from 'antd';
 import { ThemeProvider } from 'styled-components';
 
@@ -110,7 +110,7 @@ export const [CLASSNAME]HOC = (subComponents: ISubComponents) => {
           className="[NAME]-container"
         >
           {/* <SchemaTreeComponent {...schemaTree} /> */}
-          <Button onClick={this.onClick}>
+          <Button onClick={onClick}>
             {text || '点我试试'}
           </Button>
         </StyledContainer>

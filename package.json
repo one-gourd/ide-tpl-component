@@ -79,6 +79,7 @@
     "antd": "3.x",
     "mobx": "4.x",
     "mobx-react": "5.x",
+    "mobx-react-lite": "1.x",
     "mobx-state-tree": "3.x",
     "react": "16.x",
     "styled-components": "4.x.x",
