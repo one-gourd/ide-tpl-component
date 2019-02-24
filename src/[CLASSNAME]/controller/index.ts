@@ -1,5 +1,5 @@
 import Application from 'ette';
-// import { applyProxy } from './util';
+// import { applyProxy } from 'ide-lib-base-component';
 
 import { IStoresModel } from '../schema/stores';
 import { router as GetRouter } from '../router/get';

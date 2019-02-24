@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Button } from 'antd';
-import { ThemeProvider } from 'styled-components';
+import { pick } from 'ide-lib-utils';
+import { based, Omit, IBaseTheme, IBaseStyles, IBaseComponentProps } from 'ide-lib-base-component';
+
 
 // import {
 //   ISchemaTreeProps,
@@ -11,14 +13,11 @@ import { ThemeProvider } from 'styled-components';
 // } from 'ide-tree';
 
 import { debugInteract, debugRender } from '../lib/debug';
-import { pick } from '../lib/util';
 import { StyledContainer } from './styles';
 import { AppFactory } from './controller/index';
 import { StoresFactory, IStoresModel } from './schema/stores';
 import { T[CLASSNAME]ControlledKeys, CONTROLLED_KEYS } from './schema/index';
 
-type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
-// type OptionalProps<T, K> = T | Omit<T, K>;
 // type OptionalSchemaTreeProps = OptionalProps<
 //   ISchemaTreeProps,
 //   TSchemaTreeControlledKeys
@@ -34,20 +33,15 @@ export interface I[CLASSNAME]Event {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-export interface IStyles {
-  [propName: string]: React.CSSProperties;
-}
-
-export interface I[CLASSNAME]Styles extends IStyles {
+export interface I[CLASSNAME]Styles extends IBaseStyles {
   container?: React.CSSProperties;
 }
 
-export interface I[CLASSNAME]Theme {
+export interface I[CLASSNAME]Theme extends IBaseTheme{
   main: string;
-  [prop: string]: any;
 }
 
-export interface I[CLASSNAME]Props extends I[CLASSNAME]Event{
+export interface I[CLASSNAME]Props extends I[CLASSNAME]Event, IBaseComponentProps{
   // /**
   // * 子组件 schemaTree
   // */
@@ -62,16 +56,6 @@ export interface I[CLASSNAME]Props extends I[CLASSNAME]Event{
    * 文案
    */
   text?: string;
-
-  /**
-   * 样式集合，方便外部控制
-   */
-  styles?: I[CLASSNAME]Styles;
-
-  /**
-   * 设置主题
-   */
-  theme?: I[CLASSNAME]Theme;
 
 };
 
@@ -94,7 +78,7 @@ export const [CLASSNAME]HOC = (subComponents: ISubComponents) => {
   const [CLASSNAME]HOC = (props: I[CLASSNAME]Props = DEFAULT_PROPS) => {
     // const { SchemaTreeComponent } = subComponents;
     const mergedProps = Object.assign({}, DEFAULT_PROPS, props);
-    const { /* schemaTree, */ visible, text, styles, theme } = mergedProps;
+    const { /* schemaTree, */ visible, text, styles } = mergedProps;
 
     const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
       const { onClick } = props;
@@ -102,7 +86,6 @@ export const [CLASSNAME]HOC = (subComponents: ISubComponents) => {
     };
 
     return (
-      <ThemeProvider theme={theme}>
         <StyledContainer
           style={styles.container}
           visible={visible}
@@ -114,11 +97,10 @@ export const [CLASSNAME]HOC = (subComponents: ISubComponents) => {
             {text || '点我试试'}
           </Button>
         </StyledContainer>
-      </ThemeProvider>
     );
   };
   [CLASSNAME]HOC.displayName = '[CLASSNAME]HOC';
-  return observer([CLASSNAME]HOC);
+  return observer(based([CLASSNAME]HOC));
 };
 
 // 采用高阶组件方式生成普通的 [CLASSNAME] 组件
