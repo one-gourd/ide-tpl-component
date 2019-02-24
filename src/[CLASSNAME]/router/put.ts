@@ -1,9 +1,7 @@
 import Router from 'ette-router';
 import { updateStylesMiddleware, updateThemeMiddleware } from 'ide-lib-base-component';
 
-
 import { IContext } from './helper';
-import { isPlainObject } from '../../lib/util';
 
 
 export const router = new Router();
@@ -27,4 +25,4 @@ router.put('model', '/model/styles/:target', updateStylesMiddleware('model'));
 
 
 // 更新 theme 属性
-router.put('model', '/model/theme/:target', updateStylesMiddleware('model'));
+router.put('model', '/model/theme/:target', updateThemeMiddleware('model'));

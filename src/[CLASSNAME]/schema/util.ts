@@ -1,4 +1,3 @@
-import { invariant, capitalize } from 'ide-lib-utils';
 import { updateInScope, BASE_CONTROLLED_KEYS } from 'ide-lib-base-component'
 import { debugModel } from '../../lib/debug';
 import { I[CLASSNAME]Props, I[CLASSNAME]Model, [CLASSNAME]Model, IStoresModel, DEFAULT_PROPS } from '../../index';
