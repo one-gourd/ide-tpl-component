@@ -1,8 +1,9 @@
+import Application from 'ette';
 import React, { Component } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Button } from 'antd';
 import { pick } from 'ide-lib-utils';
-import { based, Omit, IBaseTheme, IBaseStyles, IBaseComponentProps } from 'ide-lib-base-component';
+import { based, Omit, OptionalProps, IBaseTheme, IBaseComponentProps, IStoresEnv, useIndectedEvents } from 'ide-lib-base-component';
 
 
 // import {
@@ -33,9 +34,9 @@ export interface I[CLASSNAME]Event {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-export interface I[CLASSNAME]Styles extends IBaseStyles {
-  container?: React.CSSProperties;
-}
+// export interface I[CLASSNAME]Styles extends IBaseStyles {
+//   container?: React.CSSProperties;
+// }
 
 export interface I[CLASSNAME]Theme extends IBaseTheme{
   main: string;
@@ -124,9 +125,10 @@ const onClickWithStore = (
  * 科里化创建 [CLASSNAME]WithStore 组件
  * @param stores - store 模型实例
  */
-export const [CLASSNAME]AddStore = (stores: IStoresModel) => {
+export const [CLASSNAME]AddStore = (storesEnv: IStoresEnv<IStoresModel>) => {
+  const {stores} = storesEnv;
   const [CLASSNAME]HasSubStore = [CLASSNAME]HOC({
-    // SchemaTreeComponent: SchemaTreeAddStore(stores.schemaTree)
+    // SchemaTreeComponent: SchemaTreeAddStore(stores.schemaTree, /* , extracSubEnv(env, 'schemaTree') */)
   });
 
   const [CLASSNAME]WithStore = (props: Omit<I[CLASSNAME]Props, T[CLASSNAME]ControlledKeys>) => {
@@ -134,9 +136,14 @@ export const [CLASSNAME]AddStore = (stores: IStoresModel) => {
     const {/* schemaTree, */ model } = stores;
     const controlledProps = pick(model, CONTROLLED_KEYS);
     debugRender(`[${stores.id}] rendering`);
+
+    // const schemaTreeWithInjected = useIndectedEvents<ISchemaTreeProps, IStoresModel>(storesEnv, schemaTree, {
+    //   'onRightClickNode': [showContextMenu]
+    // });
+
     return (
       <[CLASSNAME]HasSubStore
-        // schemaTree={ schemaTree }
+        // schemaTree={ schemaTreeWithInjected }
         {...controlledProps}
         {...otherProps}
       />
@@ -146,17 +153,29 @@ export const [CLASSNAME]AddStore = (stores: IStoresModel) => {
   [CLASSNAME]WithStore.displayName = '[CLASSNAME]WithStore';
   return observer([CLASSNAME]WithStore);
 }
+
 /**
- * 工厂函数，每调用一次就获取一副 MVC
- * 用于隔离不同的 [CLASSNAME]WithStore 的上下文
+ * 生成 env 对象，方便在不同的状态组件中传递上下文
  */
-export const [CLASSNAME]Factory = () => {
-  const {stores, innerApps} = StoresFactory(); // 创建 model
+export const [CLASSNAME]StoresEnv = () => {
+  const { stores, innerApps } = StoresFactory(); // 创建 model
   const app = AppFactory(stores, innerApps); // 创建 controller，并挂载 model
   return {
     stores,
     app,
     client: app.client,
-    [CLASSNAME]WithStore: [CLASSNAME]AddStore(stores)
+    innerApps: innerApps
   };
+}
+
+/**
+ * 工厂函数，每调用一次就获取一副 MVC
+ * 用于隔离不同的 [CLASSNAME]WithStore 的上下文
+ */
+export const [CLASSNAME]Factory = () => {
+  const storesEnv = [CLASSNAME]StoresEnv();
+  return {
+    ...storesEnv,
+    [CLASSNAME]WithStore: [CLASSNAME]AddStore(storesEnv)
+  }
 };
