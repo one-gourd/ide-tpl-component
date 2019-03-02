@@ -5,13 +5,14 @@ import { Button } from 'antd';
 import { pick } from 'ide-lib-utils';
 import { based, Omit, OptionalProps, IBaseTheme, IBaseComponentProps, IStoresEnv, useIndectedEvents } from 'ide-lib-base-component';
 
-
-// import {
-//   ISchemaTreeProps,
-//   SchemaTree,
-//   SchemaTreeAddStore,
-//   TSchemaTreeControlledKeys
-// } from 'ide-tree';
+[SUBCOMP_START]
+import {
+  ISchemaTreeProps,
+  SchemaTree,
+  SchemaTreeAddStore,
+  TSchemaTreeControlledKeys
+} from 'ide-tree';
+[SUBCOMP_END]
 
 import { debugInteract, debugRender } from '../lib/debug';
 import { StyledContainer } from './styles';
@@ -19,10 +20,12 @@ import { AppFactory } from './controller/index';
 import { StoresFactory, IStoresModel } from './schema/stores';
 import { T[CLASSNAME]ControlledKeys, CONTROLLED_KEYS } from './schema/index';
 
-// type OptionalSchemaTreeProps = OptionalProps<
-//   ISchemaTreeProps,
-//   TSchemaTreeControlledKeys
-// >;
+[SUBCOMP_START]
+type OptionalSchemaTreeProps = OptionalProps<
+  ISchemaTreeProps,
+  TSchemaTreeControlledKeys
+>;
+[SUBCOMP_END]
 interface ISubComponents {
   // SchemaTreeComponent: React.ComponentType<OptionalSchemaTreeProps>;
 }
@@ -43,11 +46,12 @@ export interface I[CLASSNAME]Theme extends IBaseTheme{
 }
 
 export interface I[CLASSNAME]Props extends I[CLASSNAME]Event, IBaseComponentProps{
-  // /**
-  // * 子组件 schemaTree
-  // */
-  // schemaTree: OptionalSchemaTreeProps;
-
+[SUBCOMP_START] 
+  /**
+  * 子组件 schemaTree
+  */
+  schemaTree: OptionalSchemaTreeProps;
+[SUBCOMP_END]
   /**
    * 是否展现
    */
@@ -93,7 +97,9 @@ export const [CLASSNAME]HOC = (subComponents: ISubComponents) => {
           // ref={this.root}
           className="[NAME]-container"
         >
-          {/* <SchemaTreeComponent {...schemaTree} /> */}
+[SUBCOMP_START] 
+          <SchemaTreeComponent {...schemaTree} />
+[SUBCOMP_END]
           <Button onClick={onClick}>
             {text || '点我试试'}
           </Button>
@@ -106,20 +112,14 @@ export const [CLASSNAME]HOC = (subComponents: ISubComponents) => {
 
 // 采用高阶组件方式生成普通的 [CLASSNAME] 组件
 export const [CLASSNAME] = [CLASSNAME]HOC({
-  // SchemaTreeComponent: SchemaTree,
+[SUBCOMP_START] 
+  SchemaTreeComponent: SchemaTree,
+[SUBCOMP_END]
 });
 
 /* ----------------------------------------------------
     以下是专门配合 store 时的组件版本
 ----------------------------------------------------- */
-
-const onClickWithStore = (
-  stores: IStoresModel,
-  onClick: React.MouseEventHandler<HTMLButtonElement>
-) => (e: React.MouseEvent<HTMLButtonElement>) => {
-  // stores.setValue(newValue);
-  onClick && onClick(e);
-};
 
 /**
  * 科里化创建 [CLASSNAME]WithStore 组件
@@ -128,24 +128,38 @@ const onClickWithStore = (
 export const [CLASSNAME]AddStore = (storesEnv: IStoresEnv<IStoresModel>) => {
   const {stores} = storesEnv;
   const [CLASSNAME]HasSubStore = [CLASSNAME]HOC({
-    // SchemaTreeComponent: SchemaTreeAddStore(stores.schemaTree, /* , extracSubEnv(env, 'schemaTree') */)
+[SUBCOMP_START] 
+    SchemaTreeComponent: SchemaTreeAddStore(stores.schemaTree, extracSubEnv(storesEnv, 'schemaTree'))
+[SUBCOMP_END]
   });
 
   const [CLASSNAME]WithStore = (props: Omit<I[CLASSNAME]Props, T[CLASSNAME]ControlledKeys>) => {
-    const {/* schemaTree, */ onClick, ...otherProps} = props;
-    const {/* schemaTree, */ model } = stores;
+    const {
+[SUBCOMP_START]    
+      schemaTree, 
+[SUBCOMP_END]
+     ...otherProps} = props;
+    const { model } = stores;
     const controlledProps = pick(model, CONTROLLED_KEYS);
     debugRender(`[${stores.id}] rendering`);
 
-    // const schemaTreeWithInjected = useIndectedEvents<ISchemaTreeProps, IStoresModel>(storesEnv, schemaTree, {
-    //   'onRightClickNode': [showContextMenu]
-    // });
+[SUBCOMP_START] 
+    const schemaTreeWithInjected = useIndectedEvents<ISchemaTreeProps, IStoresModel>(storesEnv, schemaTree, {
+      'onRightClickNode': [showContextMenu]
+    });
+[SUBCOMP_END]
+
+  const otherPropsWithInjected = useIndectedEvents<IComponentTreeProps, IStoresModel>(storesEnv, otherProps, {
+    // 'onSelectListItem': [addChildNodeByItem]
+  });
 
     return (
       <[CLASSNAME]HasSubStore
-        // schemaTree={ schemaTreeWithInjected }
+[SUBCOMP_START]    
+        schemaTree={ schemaTreeWithInjected }
+[SUBCOMP_END]
         {...controlledProps}
-        {...otherProps}
+        {...otherPropsWithInjected}
       />
     );
   };
