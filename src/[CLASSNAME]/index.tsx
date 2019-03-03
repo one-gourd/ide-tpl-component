@@ -1,9 +1,8 @@
-import Application from 'ette';
 import React, { Component } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Button } from 'antd';
 import { pick } from 'ide-lib-utils';
-import { based, Omit, OptionalProps, IBaseTheme, IBaseComponentProps, IStoresEnv, useIndectedEvents } from 'ide-lib-base-component';
+import { based, Omit, OptionalProps, IBaseTheme, IBaseComponentProps, IStoresEnv, useIndectedEvents, extracSubEnv } from 'ide-lib-base-component';
 
 [SUBCOMP_START]
 import {

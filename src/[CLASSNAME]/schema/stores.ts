@@ -91,6 +91,7 @@ export function StoresFactory() {
   const stores = Stores.create(
     {
       id: `${STORE_ID_PREIX}${autoId++}`,
+      model: createEmptyModel(),
       ...subStores
     }, {
       clients: subClients
