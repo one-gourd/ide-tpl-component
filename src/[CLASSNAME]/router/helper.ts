@@ -3,7 +3,11 @@ import { IContext as IEtteContext } from 'ette';
 import { getSubRouterPrefix } from 'ide-lib-base-component';
 [SUBCOMP_END]
 
-import { IStoresModel [SUBCOMP_START], ESubApps[SUBCOMP_END] } from '../schema/stores';
+import { IStoresModel 
+  [SUBCOMP_START]
+  , ESubApps
+  [SUBCOMP_END] 
+} from '../schema/stores';
 export interface IContext extends IEtteContext{
   stores: IStoresModel;
   [propName: string]: any;

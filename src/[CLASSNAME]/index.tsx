@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useCallback } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Button } from 'antd';
 import { pick } from 'ide-lib-utils';
@@ -18,6 +18,7 @@ import { StyledContainer } from './styles';
 import { AppFactory } from './controller/index';
 import { StoresFactory, IStoresModel } from './schema/stores';
 import { T[CLASSNAME]ControlledKeys, CONTROLLED_KEYS } from './schema/index';
+import { showConsole } from './solution';
 
 [SUBCOMP_START]
 type OptionalSchemaTreeProps = OptionalProps<
@@ -84,10 +85,10 @@ export const [CLASSNAME]HOC = (subComponents: ISubComponents) => {
     const mergedProps = Object.assign({}, DEFAULT_PROPS, props);
     const { /* schemaTree, */ visible, text, styles } = mergedProps;
 
-    const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const onClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
       const { onClick } = props;
       onClick && onClick(e);
-    };
+    }, []);
 
     return (
         <StyledContainer
@@ -148,8 +149,8 @@ export const [CLASSNAME]AddStore = (storesEnv: IStoresEnv<IStoresModel>) => {
     });
 [SUBCOMP_END]
 
-  const otherPropsWithInjected = useIndectedEvents<IComponentTreeProps, IStoresModel>(storesEnv, otherProps, {
-    // 'onSelectListItem': [addChildNodeByItem]
+  const otherPropsWithInjected = useIndectedEvents <I[CLASSNAME]Props, IStoresModel>(storesEnv, otherProps, {
+    'onClick': [showConsole]
   });
 
     return (

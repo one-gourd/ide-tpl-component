@@ -1,7 +1,7 @@
 import { cast, types, Instance, SnapshotOrInstance } from 'mobx-state-tree';
-import {
+import { TAnyMSTModel, IStoresEnv, 
   [SUBCOMP_START]
-  TAnyMSTModel, getSubStoresAssigner, IStoresEnv,
+  getSubStoresAssigner,
   [SUBCOMP_END]
   getSubAppsFromFactoryMap } from 'ide-lib-base-component';
 
@@ -26,11 +26,15 @@ export const STORES_CONTROLLED_KEYS: string[] = [
 ];
 
 
-[SUBCOMP_START]
+
 export enum ESubApps {
+  [SUBCOMP_START]
   schemaTree = 'schemaTree'
+  [SUBCOMP_END]
 };
 
+
+[SUBCOMP_START]
 export const NAMES_SUBAPP = Object.values(ESubApps);
 
 // 定义子 stores 映射关系
@@ -51,7 +55,7 @@ export const Stores = types
   .model('StoresModel', {
     id: types.refinement(
       types.identifier,
-      identifier => identifier.indexOf(STORE_ID_PREIX) === 0
+      (identifier: string)  => identifier.indexOf(STORE_ID_PREIX) === 0
     ),
     model: [CLASSNAME]Model,
 [SUBCOMP_START]
@@ -88,12 +92,11 @@ export function StoresFactory() {
 
   // see: https://github.com/mobxjs/mobx-state-tree#dependency-injection
   // 依赖注入，方便在 controller 中可以直接调用子组件的 controller
-  const stores = Stores.create(
-    {
+  const stores: IStoresModel = Stores.create(
+    Object.assign({}, {
       id: `${STORE_ID_PREIX}${autoId++}`,
       model: createEmptyModel(),
-      ...subStores
-    }, {
+    }, subStores), {
       clients: subClients
     }
   );

@@ -1,5 +1,7 @@
 import Router from 'ette-router';
+[SUBCOMP_START]
 import { getInnerAppsMiddleware } from 'ide-lib-base-component';
+[SUBCOMP_END]
 
 import { IContext } from './helper';
 
@@ -17,6 +19,7 @@ router.get('model', '/model', function (ctx: IContext) {
   ctx.response.status = 200;
 });
 
-
+[SUBCOMP_START]
 // 返回某个 client 对象
 router.get('clients', '/innerApps/:name', getInnerAppsMiddleware);
+[SUBCOMP_END]
