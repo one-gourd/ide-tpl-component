@@ -27,7 +27,9 @@ type OptionalSchemaTreeProps = OptionalProps<
 >;
 [SUBCOMP_END]
 interface ISubComponents {
-  // SchemaTreeComponent: React.ComponentType<OptionalSchemaTreeProps>;
+  [SUBCOMP_START]
+  SchemaTreeComponent: React.ComponentType<OptionalSchemaTreeProps>;
+  [SUBCOMP_END]
 }
 
 export interface I[CLASSNAME]Event {
@@ -81,9 +83,15 @@ export const DEFAULT_PROPS: I[CLASSNAME]Props = {
  */
 export const [CLASSNAME]HOC = (subComponents: ISubComponents) => {
   const [CLASSNAME]HOC = (props: I[CLASSNAME]Props = DEFAULT_PROPS) => {
-    // const { SchemaTreeComponent } = subComponents;
+    [SUBCOMP_START]
+    const { SchemaTreeComponent } = subComponents;
+    [SUBCOMP_END]
     const mergedProps = Object.assign({}, DEFAULT_PROPS, props);
-    const { /* schemaTree, */ visible, text, styles } = mergedProps;
+    const { 
+      [SUBCOMP_START]
+      schemaTree,
+      [SUBCOMP_END]
+      visible, text, styles } = mergedProps;
 
     const onClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
       const { onClick } = props;
