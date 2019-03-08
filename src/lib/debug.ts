@@ -4,4 +4,4 @@ const { debugBase, debugComp, debugError, debugIO, debugInteract, debugMini, deb
 
 export {
     debugBase, debugComp, debugError, debugIO, debugInteract, debugMini, debugModel, debugRender
-}
+};

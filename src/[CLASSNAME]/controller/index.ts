@@ -21,7 +21,7 @@ export const AppFactory = function (stores: IStoresModel, innerApps: Record<stri
     app.innerApps = innerApps; // 新增 innerApps 的挂载
 
     // 挂载 stores 到上下文中，注意这里的 next 必须要使用 async，否则 proxy 的时候将出现异步偏差
-    app.use(async (ctx: any, next) => {
+    app.use(async (ctx: any, next: any) => {
         ctx.stores = stores;
         ctx.innerApps = innerApps;
         // 因为存在代理，url 中的路径将有可能被更改

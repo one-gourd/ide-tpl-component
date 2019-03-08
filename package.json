@@ -46,6 +46,7 @@
     "chance": "^1.0.16",
     "clean-webpack-plugin": "^1.0.0",
     "copy-webpack-plugin": "^4.6.0",
+    "http-proxy-middleware": "^0.19.1",
     "css-loader": "^1.0.1",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.7.0",

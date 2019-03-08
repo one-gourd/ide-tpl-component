@@ -136,7 +136,7 @@ export const [CLASSNAME]AddStore = (storesEnv: IStoresEnv<IStoresModel>) => {
   const [CLASSNAME]WithStore = (props: Omit<I[CLASSNAME]Props, T[CLASSNAME]ControlledKeys>) => {
     const {
 [SUBCOMP_START]    
-      schemaTree, 
+      schemaTree={}, 
 [SUBCOMP_END]
      ...otherProps} = props;
     const { model } = stores;

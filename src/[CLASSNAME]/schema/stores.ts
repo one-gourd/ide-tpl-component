@@ -93,10 +93,11 @@ export function StoresFactory() {
   // see: https://github.com/mobxjs/mobx-state-tree#dependency-injection
   // 依赖注入，方便在 controller 中可以直接调用子组件的 controller
   const stores: IStoresModel = Stores.create(
-    Object.assign({}, {
+    {
       id: `${STORE_ID_PREIX}${autoId++}`,
-      model: createEmptyModel(),
-    }, subStores), {
+      model: createEmptyModel() as any,
+      ...subStores as Record<ESubApps, TAnyMSTModel>
+    }, {
       clients: subClients
     }
   );
