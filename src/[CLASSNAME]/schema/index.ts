@@ -74,7 +74,7 @@ export const [CLASSNAME]Model = BaseModel
     return {
      
       updateAttribute(name: string, value: any) {
-        return updateModelAttribute(self as I[CLASSNAME]Model, name, value);
+        return updateModelAttribute(self, name, value);
       }
     };
   });

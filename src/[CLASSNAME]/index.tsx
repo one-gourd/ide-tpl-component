@@ -50,7 +50,7 @@ export interface I[CLASSNAME]Props extends I[CLASSNAME]Event, IBaseComponentProp
   /**
   * 子组件 schemaTree
   */
-  schemaTree: OptionalSchemaTreeProps;
+  schemaTree?: OptionalSchemaTreeProps;
 [SUBCOMP_END]
   /**
    * 是否展现
@@ -129,6 +129,7 @@ export const [CLASSNAME]AddStore = (storesEnv: IStoresEnv<IStoresModel>) => {
   const {stores} = storesEnv;
   const [CLASSNAME]HasSubStore = [CLASSNAME]HOC({
 [SUBCOMP_START] 
+    // @ts-ignore
     SchemaTreeComponent: SchemaTreeAddStore(stores.schemaTree, extracSubEnv(storesEnv, 'schemaTree'))
 [SUBCOMP_END]
   });
@@ -145,7 +146,7 @@ export const [CLASSNAME]AddStore = (storesEnv: IStoresEnv<IStoresModel>) => {
 
 [SUBCOMP_START] 
     const schemaTreeWithInjected = useIndectedEvents<ISchemaTreeProps, IStoresModel>(storesEnv, schemaTree, {
-      'onRightClickNode': [showContextMenu]
+      'onRightClickNode': []
     });
 [SUBCOMP_END]
 
