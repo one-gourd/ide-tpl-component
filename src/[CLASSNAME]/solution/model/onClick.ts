@@ -10,6 +10,6 @@ import { IStoresModel } from '../../schema/stores';
  */
 export const showConsole = (env: IStoresEnv<IStoresModel>) => async (key: string, keyPath: Array<string>, item: any) => {
     const { stores, client } = env;
-    stores.model.setVisible(true); // 可见
+    // stores.model.setVisible(true); // 可见
 }
 

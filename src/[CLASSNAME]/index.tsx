@@ -82,16 +82,15 @@ export const DEFAULT_PROPS: I[CLASSNAME]Props = {
  * @param subComponents - 子组件列表
  */
 export const [CLASSNAME]HOC = (subComponents: ISubComponents) => {
-  const [CLASSNAME]HOC = (props: I[CLASSNAME]Props = DEFAULT_PROPS) => {
+  const [CLASSNAME]HOC = (props: I[CLASSNAME]Props) => {
     [SUBCOMP_START]
     const { SchemaTreeComponent } = subComponents;
     [SUBCOMP_END]
-    const mergedProps = Object.assign({}, DEFAULT_PROPS, props);
     const { 
       [SUBCOMP_START]
       schemaTree,
       [SUBCOMP_END]
-      visible, text, styles } = mergedProps;
+      visible, text, styles } = props;
 
     const onClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
       const { onClick } = props;
@@ -115,7 +114,7 @@ export const [CLASSNAME]HOC = (subComponents: ISubComponents) => {
     );
   };
   [CLASSNAME]HOC.displayName = '[CLASSNAME]HOC';
-  return observer(based([CLASSNAME]HOC));
+  return observer(based([CLASSNAME]HOC, DEFAULT_PROPS));
 };
 
 // 采用高阶组件方式生成普通的 [CLASSNAME] 组件
