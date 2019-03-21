@@ -8,7 +8,7 @@ import {
 } from 'mobx-state-tree';
 
 import { pick } from 'ide-lib-utils';
-import { BaseModel, TBaseControlledKeys, BASE_CONTROLLED_KEYS } from 'ide-lib-base-component';
+import { BaseModel, TBaseControlledKeys, BASE_CONTROLLED_KEYS, stringLiterals, ElementType } from 'ide-lib-base-component';
 
 import { debugModel } from '../../lib/debug';
 import { updateModelAttribute } from './util';
@@ -21,21 +21,18 @@ import { updateModelAttribute } from './util';
 // export const CODE_LANGUAGES = Object.values(ECodeLanguage);
 
 
-// 获取被 store 控制的 model key 的列表
-export type T[CLASSNAME]ControlledKeys =
-  keyof SnapshotOrInstance < typeof [CLASSNAME]Model> | TBaseControlledKeys;
+// 
+const SELF_CONTROLLED_KEYS = stringLiterals('visible','text');
+export const CONTROLLED_KEYS = BASE_CONTROLLED_KEYS.concat(SELF_CONTROLLED_KEYS);
 
-// 定义被 store 控制的 model key 的列表，没法借用 ts 的能力动态从 T[CLASSNAME]ControlledKeys 中获取
-export const CONTROLLED_KEYS: string[] = BASE_CONTROLLED_KEYS.concat([
-  'visible',
-  'text'
-]);
+// 获取被 store 控制的 model key 的列表，
+export type TSwitchPanelControlledKeys = ElementType<typeof SELF_CONTROLLED_KEYS> | TBaseControlledKeys;
 
 
 /**
  * [CLASSNAME] 对应的模型
  */
-export const [CLASSNAME]Model = BaseModel
+export const [CLASSNAME]Model: IAnyModelType = BaseModel
   .named('[CLASSNAME]Model')
   .props({
     visible: types.optional(types.boolean, true),

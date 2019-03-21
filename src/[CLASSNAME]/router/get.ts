@@ -2,9 +2,13 @@ import Router from 'ette-router';
 import { 
 [SUBCOMP_START]
   getInnerAppsMiddleware, 
+  getClientFromCtx,
 [SUBCOMP_END]
   buildNormalResponse } from 'ide-lib-base-component';
 
+[SUBCOMP_START]
+import { ESubApps } from '../schema/stores';
+[SUBCOMP_END]
 
 import { IContext } from './helper';
 
@@ -16,7 +20,9 @@ router.get('getModelInstance', '/model', function (ctx: IContext) {
   const { stores, request } = ctx;
   const { query } = request;
   const filterArray = query && query.filter && query.filter.trim().split(',');
-
+  [SUBCOMP_START]
+  // const schemaTreeClient = getClientFromCtx(ctx, ESubApps.schemaTree); // 获取子 client
+  [SUBCOMP_END]
   buildNormalResponse(ctx, 200, { attributes: stores.model.allAttibuteWithFilter(filterArray) });
 });
 

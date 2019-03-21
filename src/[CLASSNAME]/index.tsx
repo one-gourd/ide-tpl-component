@@ -2,7 +2,7 @@ import React, { Component, useCallback } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Button } from 'antd';
 import { pick } from 'ide-lib-utils';
-import { based, Omit, OptionalProps, IBaseTheme, IBaseComponentProps, IStoresEnv, useIndectedEvents, extracSubEnv } from 'ide-lib-base-component';
+import { based, Omit, OptionalProps, IBaseTheme, IBaseComponentProps, IStoresEnv, useIndectedEvents, addModelChangeListener, extracSubEnv } from 'ide-lib-base-component';
 
 [SUBCOMP_START]
 import {
@@ -81,7 +81,7 @@ export const DEFAULT_PROPS: I[CLASSNAME]Props = {
  * 使用高阶组件打造的组件生成器
  * @param subComponents - 子组件列表
  */
-export const [CLASSNAME]HOC = (subComponents: ISubComponents) => {
+export const [CLASSNAME]HOC: (subComponents: ISubComponents) => React.FunctionComponent<I[CLASSNAME]Props> = (subComponents) => {
   const [CLASSNAME]HOC = (props: I[CLASSNAME]Props) => {
     [SUBCOMP_START]
     const { SchemaTreeComponent } = subComponents;
@@ -90,12 +90,11 @@ export const [CLASSNAME]HOC = (subComponents: ISubComponents) => {
       [SUBCOMP_START]
       schemaTree,
       [SUBCOMP_END]
-      visible, text, styles } = props;
+      visible, text, styles, onClick} = props;
 
-    const onClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-      const { onClick } = props;
+    const onClickButton = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
       onClick && onClick(e);
-    }, []);
+    }, [onClick]);
 
     return (
         <StyledContainer
@@ -107,7 +106,7 @@ export const [CLASSNAME]HOC = (subComponents: ISubComponents) => {
 [SUBCOMP_START] 
           <SchemaTreeComponent {...schemaTree} />
 [SUBCOMP_END]
-          <Button onClick={onClick}>
+          <Button onClick={onClickButton}>
             {text || '点我试试'}
           </Button>
         </StyledContainer>
@@ -132,12 +131,12 @@ export const [CLASSNAME] = [CLASSNAME]HOC({
  * 科里化创建 [CLASSNAME]WithStore 组件
  * @param stores - store 模型实例
  */
-export const [CLASSNAME]AddStore = (storesEnv: IStoresEnv<IStoresModel>) => {
+export const [CLASSNAME]AddStore: (storesEnv: IStoresEnv<IStoresModel>) => React.FunctionComponent<I[CLASSNAME]Props> = (storesEnv) => {
   const {stores} = storesEnv;
   const [CLASSNAME]HasSubStore = [CLASSNAME]HOC({
 [SUBCOMP_START] 
     // @ts-ignore
-    SchemaTreeComponent: SchemaTreeAddStore(stores.schemaTree, extracSubEnv(storesEnv, 'schemaTree'))
+    SchemaTreeComponent: SchemaTreeAddStore(extracSubEnv(storesEnv, 'schemaTree'))
 [SUBCOMP_END]
   });
 
@@ -160,6 +159,12 @@ export const [CLASSNAME]AddStore = (storesEnv: IStoresEnv<IStoresModel>) => {
   const otherPropsWithInjected = useIndectedEvents <I[CLASSNAME]Props, IStoresModel>(storesEnv, otherProps, {
     'onClick': [showConsole]
   });
+
+  addModelChangeListener(
+    model,
+    CONTROLLED_KEYS,
+    otherPropsWithInjected.onModelChange
+  );
 
     return (
       <[CLASSNAME]HasSubStore
