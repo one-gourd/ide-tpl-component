@@ -26,7 +26,7 @@ const SELF_CONTROLLED_KEYS = stringLiterals('visible','text');
 export const CONTROLLED_KEYS = BASE_CONTROLLED_KEYS.concat(SELF_CONTROLLED_KEYS);
 
 // 获取被 store 控制的 model key 的列表，
-export type TSwitchPanelControlledKeys = ElementType<typeof SELF_CONTROLLED_KEYS> | TBaseControlledKeys;
+export type T[CLASSNAME]ControlledKeys = ElementType<typeof SELF_CONTROLLED_KEYS> | TBaseControlledKeys;
 
 
 /**

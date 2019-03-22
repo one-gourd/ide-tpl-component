@@ -2,7 +2,7 @@ import React, { Component, useCallback } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Button } from 'antd';
 import { pick } from 'ide-lib-utils';
-import { based, Omit, OptionalProps, IBaseTheme, IBaseComponentProps, IStoresEnv, useIndectedEvents, addModelChangeListener, extracSubEnv } from 'ide-lib-base-component';
+import { based, Omit, OptionalProps, IBaseTheme, IBaseComponentProps, IStoresEnv, useInjectedEvents, addModelChangeListener, extracSubEnv } from 'ide-lib-base-component';
 
 [SUBCOMP_START]
 import {
@@ -151,12 +151,12 @@ export const [CLASSNAME]AddStore: (storesEnv: IStoresEnv<IStoresModel>) => React
     debugRender(`[${stores.id}] rendering`);
 
 [SUBCOMP_START] 
-    const schemaTreeWithInjected = useIndectedEvents<ISchemaTreeProps, IStoresModel>(storesEnv, schemaTree, {
+    const schemaTreeWithInjected = useInjectedEvents<ISchemaTreeProps, IStoresModel>(storesEnv, schemaTree, {
       'onRightClickNode': []
     });
 [SUBCOMP_END]
 
-  const otherPropsWithInjected = useIndectedEvents <I[CLASSNAME]Props, IStoresModel>(storesEnv, otherProps, {
+  const otherPropsWithInjected = useInjectedEvents <I[CLASSNAME]Props, IStoresModel>(storesEnv, otherProps, {
     'onClick': [showConsole]
   });
 
