@@ -113,7 +113,7 @@ export const [CLASSNAME]HOC: (subComponents: ISubComponents) => React.FunctionCo
     );
   };
   [CLASSNAME]HOC.displayName = '[CLASSNAME]HOC';
-  return observer(based([CLASSNAME]HOC, DEFAULT_PROPS));
+  return observer(based(observer([CLASSNAME]HOC), DEFAULT_PROPS));
 };
 
 // 采用高阶组件方式生成普通的 [CLASSNAME] 组件
